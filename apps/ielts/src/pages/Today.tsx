@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { Alert, Button, Card, CardHeader, CircularProgress, EmptyState, IconButton, Text } from "@my-design/ui-web";
+import { useEffect, useState } from "react";
+import { Alert, Avatar, Button, Card, CardHeader, EmptyState, Icon, IconButton, RevealGroup, Text, TiltCard, TiltLayer } from "@my-design/ui-web";
+import type { IconName } from "@my-design/tokens";
 import type { Page } from "../App";
 import { activeDays, daysToFriday, formatDay, isFriday, streak, useStore } from "../store";
 import { greeting, messageOfTheDay } from "../motivation";
-import { PageHeader, WordForm, WordListModal } from "./common";
+import { WordForm, WordListModal } from "./common";
 import { WordMedia } from "../media";
 
 export function TodayPage({ go }: { go: (p: Page) => void }) {
@@ -19,9 +20,26 @@ export function TodayPage({ go }: { go: (p: Page) => void }) {
 
   return (
     <>
-      <PageHeader title={greeting(settings.name)} subtitle={formatDay(today, { weekday: "long", day: "numeric", month: "long" })} />
-
-      <p className="quote">{messageOfTheDay(today)}</p>
+      <TiltCard variant="brand" max={5} scale={1.01} padding="none" className="hero">
+        <div className="hero__inner">
+          <TiltLayer depth={24} className="hero__text">
+            <div className="hero__who">
+              <Avatar name={settings.name.trim() || "Me"} src={settings.photo} size="lg" className="hero__avatar" />
+              <div>
+                <h1 className="hero__title">{greeting(settings.name)}</h1>
+                <p className="hero__date">{formatDay(today, { weekday: "long", day: "numeric", month: "long" })}</p>
+              </div>
+            </div>
+            <p className="hero__quote">{messageOfTheDay(today)}</p>
+            <p className="hero__status">
+              {left ? `${left} word${left === 1 ? "" : "s"} to go today.` : reviewedToday ? "Goal done and review finished. Well done." : "Goal done. Play the end-of-day review next."}
+            </p>
+          </TiltLayer>
+          <TiltLayer depth={48} className="hero__ring-wrap">
+            <GoalRing value={todays.length} goal={goal} />
+          </TiltLayer>
+        </div>
+      </TiltCard>
 
       {isFriday() ? (
         <Alert tone="info" title="Today is check day" action={<Button size="sm" onClick={() => go("friday")}>Start the check</Button>}>
@@ -29,29 +47,11 @@ export function TodayPage({ go }: { go: (p: Page) => void }) {
         </Alert>
       ) : null}
 
-      <div className="today-grid">
-        <Card className="goal-card">
-          <CircularProgress value={Math.min(100, (todays.length / goal) * 100)} size={84} stroke={7} label={`${todays.length}/${goal}`} />
-          <div>
-            <Text weight="semibold">{left ? `${left} word${left === 1 ? "" : "s"} to go today` : "Today's goal is done"}</Text>
-            <Text size="sm" tone="secondary">
-              {left ? "Type your own words or pick from the IELTS list." : reviewedToday ? "You also finished today's review. Well done." : "Now play the end-of-day review to fix them in memory."}
-            </Text>
-          </div>
-        </Card>
-        <Card className="mini-stat">
-          <span className="mini-stat__num">{days}</span>
-          <Text size="sm" tone="secondary">day{days === 1 ? "" : "s"} in a row</Text>
-        </Card>
-        <Card className="mini-stat">
-          <span className="mini-stat__num">{words.length}</span>
-          <Text size="sm" tone="secondary">words in total</Text>
-        </Card>
-        <Card className="mini-stat">
-          <span className="mini-stat__num">{toFri === 0 ? "Today" : toFri}</span>
-          <Text size="sm" tone="secondary">{toFri === 0 ? "is check day" : `day${toFri === 1 ? "" : "s"} to Friday check`}</Text>
-        </Card>
-      </div>
+      <RevealGroup className="stat3" stagger={90}>
+        <StatTile icon="zap" value={days} label={`day${days === 1 ? "" : "s"} in a row`} onClick={() => go("progress")} />
+        <StatTile icon="layers" value={words.length} label="words in total" onClick={() => go("words")} />
+        <StatTile icon="task" value={toFri === 0 ? "Today" : toFri} label={toFri === 0 ? "is check day" : `day${toFri === 1 ? "" : "s"} to Friday check`} onClick={() => go("friday")} />
+      </RevealGroup>
 
       {todays.length > 0 && (
         <Card className={`review-cta${left ? "" : " review-cta--ready"}`}>
@@ -114,5 +114,47 @@ export function TodayPage({ go }: { go: (p: Page) => void }) {
 
       <WordListModal open={listOpen} onClose={() => setListOpen(false)} limit={left || 5} />
     </>
+  );
+}
+
+/** Daily goal ring. Fills once when the page opens, then follows new words. */
+function GoalRing({ value, goal }: { value: number; goal: number }) {
+  const size = 148;
+  const stroke = 12;
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  const pct = Math.min(1, value / Math.max(goal, 1));
+  const [shown, setShown] = useState(0);
+  useEffect(() => {
+    const t = requestAnimationFrame(() => setShown(pct));
+    return () => cancelAnimationFrame(t);
+  }, [pct]);
+  return (
+    <div className={`ring${pct >= 1 ? " ring--done" : ""}`} role="img" aria-label={`${value} of ${goal} words today`}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+        <circle className="ring__track" cx={size / 2} cy={size / 2} r={r} strokeWidth={stroke} />
+        <circle className="ring__fill" cx={size / 2} cy={size / 2} r={r} strokeWidth={stroke} strokeDasharray={c} strokeDashoffset={c * (1 - shown)} />
+      </svg>
+      <div className="ring__label">
+        <strong>{value}</strong>
+        <span>of {goal} today</span>
+      </div>
+    </div>
+  );
+}
+
+function StatTile({ icon, value, label, onClick }: { icon: IconName; value: number | string; label: string; onClick: () => void }) {
+  return (
+    <TiltCard max={9} padding="none" className="stat-tile">
+      <button type="button" className="stat-tile__btn" onClick={onClick}>
+        <TiltLayer depth={30} className="stat-tile__icon">
+          <Icon name={icon} size={20} />
+        </TiltLayer>
+        <TiltLayer depth={18}>
+          <span className="stat-tile__num">{value}</span>
+          <span className="stat-tile__label">{label}</span>
+        </TiltLayer>
+      </button>
+    </TiltCard>
   );
 }
