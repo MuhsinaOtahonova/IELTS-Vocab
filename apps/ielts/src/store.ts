@@ -30,6 +30,15 @@ export interface Result {
 export interface Settings {
   name: string;
   goal: number;
+  /** Profile photo as a small JPEG data URL */
+  photo?: string;
+  city?: string;
+  nativeLanguage?: string;
+  about?: string;
+  /** IELTS band you are aiming for, e.g. "7.0" */
+  targetBand?: string;
+  /** Exam day, YYYY-MM-DD */
+  examDate?: string;
 }
 
 interface State {

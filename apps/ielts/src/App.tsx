@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { BottomNav, Drawer, IconButton, Logo, NavItem, NavSection, Sidebar, Text, Topbar, useTheme } from "@my-design/ui-web";
+import { Avatar, BottomNav, Drawer, IconButton, Logo, NavItem, NavSection, Sidebar, Text, Topbar, useTheme } from "@my-design/ui-web";
 import { activeDays, isFriday, saveTheme, streak, StoreProvider, useStore } from "./store";
 import { TodayPage } from "./pages/Today";
 import { PracticePage } from "./pages/Practice";
 import { FridayPage } from "./pages/Friday";
 import { WordsPage } from "./pages/Words";
 import { ProgressPage } from "./pages/Progress";
+import { ProfilePage } from "./pages/Profile";
 
-export type Page = "today" | "practice" | "friday" | "words" | "progress";
-const pages: Page[] = ["today", "practice", "friday", "words", "progress"];
+export type Page = "today" | "practice" | "friday" | "words" | "progress" | "profile";
+const pages: Page[] = ["today", "practice", "friday", "words", "progress", "profile"];
 
 export function App() {
   return (
@@ -57,19 +58,22 @@ function Shell() {
       <NavSection title="Me">
         <NavItem icon="list" label="My words" count={store.words.length} active={page === "words"} onClick={() => go("words")} />
         <NavItem icon="chart" label="Progress" active={page === "progress"} onClick={() => go("progress")} />
+        <NavItem icon="user" label="Profile" active={page === "profile"} onClick={() => go("profile")} />
       </NavSection>
     </>
   );
 
+  const name = store.settings.name.trim();
   const footer = (
-    <div className="side-streak">
-      <span className="side-streak__num">{days}</span>
-      <span>
-        day{days === 1 ? "" : "s"} in a row
-        <br />
-        <small>{store.words.length} words saved</small>
+    <button type="button" className="side-profile" onClick={() => go("profile")} aria-label="Open profile">
+      <Avatar name={name || "Me"} src={store.settings.photo} size="md" />
+      <span className="side-profile__text">
+        <span className="side-profile__name">{name || "Set up your profile"}</span>
+        <small>
+          {days} day{days === 1 ? "" : "s"} in a row · {store.words.length} words
+        </small>
       </span>
-    </div>
+    </button>
   );
 
   return (
@@ -96,6 +100,9 @@ function Shell() {
                 <span className="topbar-streak__num">{days}</span> day streak
               </span>
               <IconButton icon={theme === "light" ? "moon" : "sun"} label={theme === "light" ? "Night mode" : "Day mode"} onClick={toggleTheme} />
+              <button type="button" className="topbar-avatar" onClick={() => go("profile")} aria-label="Profile">
+                <Avatar name={name || "Me"} src={store.settings.photo} size="sm" />
+              </button>
             </>
           }
         />
@@ -105,6 +112,7 @@ function Shell() {
           {page === "friday" && <FridayPage go={go} />}
           {page === "words" && <WordsPage />}
           {page === "progress" && <ProgressPage />}
+          {page === "profile" && <ProfilePage />}
         </main>
         <div className="app__bottomnav">
           <BottomNav
@@ -115,7 +123,7 @@ function Shell() {
               { value: "practice", label: "Practice", icon: "zap" },
               { value: "friday", label: "Friday", icon: "task", badge: friday ? 1 : undefined },
               { value: "words", label: "Words", icon: "list" },
-              { value: "progress", label: "Progress", icon: "chart" },
+              { value: "profile", label: "Me", icon: "user" },
             ]}
           />
         </div>
