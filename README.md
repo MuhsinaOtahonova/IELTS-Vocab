@@ -1,5 +1,7 @@
 # Word a Day: IELTS vocabulary
 
+https://muhsinaotahonova.github.io/IELTS-Vocab/
+
 A calm website for learning IELTS words, 10 a day. Built with the components from [my-design-template](https://github.com/MuhsinaOtahonova/my-design-template) (navy and white, day and night modes).
 
 - **Today**: add 10 words a day, typed yourself or picked from a built-in list of about 150 IELTS words. Each word has a meaning, an example and an optional picture or video link.
