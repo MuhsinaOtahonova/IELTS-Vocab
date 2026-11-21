@@ -315,6 +315,7 @@ html, body, #root { height: 100%; }
 .wcard__word { font-weight: 600; color: var(--md-color-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .wcard__meaning { font-size: var(--md-text-sm); color: var(--md-color-textSecondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .wcards__more { display: flex; justify-content: center; margin-top: 10px; }
+.wcards__search { margin-bottom: 12px; max-width: 360px; }
 .wdetail { display: flex; flex-direction: column; gap: 12px; }
 .wdetail .word-img--lg { height: 200px; max-width: 100%; }
 .wdetail__ex { margin: 0; font-style: italic; color: var(--md-color-textSecondary); }

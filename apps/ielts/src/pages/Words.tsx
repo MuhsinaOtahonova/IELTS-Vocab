@@ -17,7 +17,7 @@ export function WordsPage() {
   const [editing, setEditing] = useState<Word | null>(null);
   const query = q.trim().toLowerCase();
   const rows = words
-    .filter((w) => !query || (w.word + " " + w.meaning).toLowerCase().includes(query))
+    .filter((w) => !query || [w.word, w.meaning, w.definition ?? ""].join(" ").toLowerCase().includes(query))
     .slice()
     .reverse();
 
@@ -68,7 +68,7 @@ export function WordsPage() {
   );
 }
 
-function EditModal({ word, onClose, onSave }: { word: Word; onClose: () => void; onSave: (p: WordInput) => void }) {
+export function EditModal({ word, onClose, onSave }: { word: Word; onClose: () => void; onSave: (p: WordInput) => void }) {
   const [w, setW] = useState(word.word);
   const [m, setM] = useState(word.meaning);
   const [d, setD] = useState(word.definition ?? "");
