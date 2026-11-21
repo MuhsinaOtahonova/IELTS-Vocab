@@ -50,10 +50,12 @@ export interface Settings {
   examDate?: string;
 }
 
-interface State {
+export interface State {
   words: Word[];
   results: Result[];
   settings: Settings;
+  /** Words deleted on purpose (lower case), so a sync does not bring them back */
+  removed?: string[];
 }
 
 const KEY = "ielts-words.v1";
@@ -65,9 +67,54 @@ function load(): State {
     const raw = localStorage.getItem(KEY);
     if (!raw) return empty;
     const s = JSON.parse(raw) as Partial<State>;
-    return { words: s.words ?? [], results: s.results ?? [], settings: { ...empty.settings, ...s.settings } };
+    return { words: s.words ?? [], results: s.results ?? [], settings: { ...empty.settings, ...s.settings }, removed: s.removed ?? [] };
   } catch {
     return empty;
+  }
+}
+
+/**
+ * Combines two saved copies (this browser + GitHub, or + a backup file) without losing words.
+ * Every word from both sides is kept, unless it was deleted on purpose. When the same word is on
+ * both sides, the copy with more practice wins, and empty fields are filled from the other copy.
+ */
+export function mergeStates(a: State, b: Partial<State>): State {
+  const removed = Array.from(new Set([...(a.removed ?? []), ...(b.removed ?? [])]));
+  const gone = new Set(removed);
+  const byWord = new Map<string, Word>();
+  for (const w of [...a.words, ...(b.words ?? [])]) {
+    if (!w || typeof w.word !== "string") continue;
+    const k = w.word.toLowerCase();
+    const old = byWord.get(k);
+    if (!old) {
+      byWord.set(k, w);
+      continue;
+    }
+    const [win, other] = w.right + w.wrong > old.right + old.wrong ? [w, old] : [old, w];
+    byWord.set(k, {
+      ...other,
+      ...Object.fromEntries(Object.entries(win).filter(([, v]) => v !== undefined && v !== "")),
+      added: old.added < w.added ? old.added : w.added,
+    } as Word);
+  }
+  const words = [...byWord.values()].filter((w) => !gone.has(w.word.toLowerCase())).sort((x, y) => (x.added < y.added ? -1 : x.added > y.added ? 1 : 0));
+  const seen = new Set<string>();
+  const results = [...a.results, ...(b.results ?? [])].filter((r) => {
+    const k = `${r.date}|${r.kind}|${r.label}|${r.score}|${r.total}`;
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+  const settings = { ...empty.settings, ...b.settings, ...Object.fromEntries(Object.entries(a.settings).filter(([, v]) => v !== undefined && v !== "")) } as Settings;
+  return { words, results, settings, removed };
+}
+
+/** Keeps the last copy before a big change, just in case. */
+export function snapshot(s: State) {
+  try {
+    localStorage.setItem(KEY + ".before-sync", JSON.stringify(s));
+  } catch {
+    /* ignore */
   }
 }
 
@@ -179,6 +226,10 @@ interface Store extends State {
   addResult: (r: Omit<Result, "date">) => void;
   setSettings: (p: Partial<Settings>) => void;
   replaceAll: (s: unknown) => boolean;
+  /** Adds words from another copy (e.g. GitHub) without deleting anything */
+  mergeIn: (remote: Partial<State>) => void;
+  /** The whole saved state, for syncing */
+  state: State;
   exportJson: () => string;
 }
 
@@ -211,7 +262,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     const same = (x: Word) => x.word.toLowerCase() === word.toLowerCase();
     if (!word || ref.current.words.some(same)) return false;
     const next: Word = { id: uid(), word, meaning: w.meaning.trim(), example: w.example.trim(), image: w.image?.trim() || undefined, video: w.video?.trim() || undefined, definition: w.definition?.trim() || undefined, ownMeaning: !!w.meaning.trim() || undefined, added: added ?? dayKey(), right: 0, wrong: 0 };
-    setState((s) => (s.words.some(same) ? s : { ...s, words: [...s.words, next] }));
+    setState((s) => (s.words.some(same) ? s : { ...s, words: [...s.words, next], removed: (s.removed ?? []).filter((r) => r !== word.toLowerCase()) }));
     return true;
   }, []);
 
@@ -252,6 +303,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const value = useMemo<Store>(
     () => ({
       ...state,
+      state,
       today,
       lookingUp,
       addWord,
@@ -266,7 +318,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         busy.current.delete(id);
         setState((s) => ({ ...s, words: s.words.map((w) => (w.id === id ? { ...w, lv: 0, looked: false, ownMeaning: false } : w)) }));
       },
-      removeWord: (id) => setState((s) => ({ ...s, words: s.words.filter((w) => w.id !== id) })),
+      removeWord: (id) =>
+        setState((s) => {
+          const w = s.words.find((x) => x.id === id);
+          return { ...s, words: s.words.filter((x) => x.id !== id), removed: w ? [...(s.removed ?? []), w.word.toLowerCase()] : s.removed };
+        }),
       mark: (id, correct) =>
         setState((s) => ({ ...s, words: s.words.map((w) => (w.id === id ? { ...w, right: w.right + (correct ? 1 : 0), wrong: w.wrong + (correct ? 0 : 1) } : w)) })),
       addResult: (r) => setState((s) => ({ ...s, results: [...s.results, { ...r, date: dayKey() }] })),
@@ -275,9 +331,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       replaceAll: (raw) => {
         const s = raw as Partial<State> | null;
         if (!s || !Array.isArray(s.words)) return false;
-        setState({ words: s.words, results: Array.isArray(s.results) ? s.results : [], settings: { ...empty.settings, ...s.settings } });
+        // Restoring adds the backup's words to the ones here; nothing is deleted.
+        snapshot(ref.current);
+        setState((cur) => mergeStates(cur, s));
         return true;
       },
+      mergeIn: (remote) => setState((cur) => mergeStates(cur, remote)),
     }),
     [state, today, addWord, lookingUp],
   );

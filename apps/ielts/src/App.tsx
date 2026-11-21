@@ -7,6 +7,7 @@ import { FridayPage } from "./pages/Friday";
 import { WordsPage } from "./pages/Words";
 import { ProgressPage } from "./pages/Progress";
 import { ProfilePage } from "./pages/Profile";
+import { SyncProvider, useSync } from "./sync";
 
 export type Page = "today" | "practice" | "friday" | "words" | "progress" | "profile";
 const pages: Page[] = ["today", "practice", "friday", "words", "progress", "profile"];
@@ -14,13 +15,16 @@ const pages: Page[] = ["today", "practice", "friday", "words", "progress", "prof
 export function App() {
   return (
     <StoreProvider>
-      <Shell />
+      <SyncProvider>
+        <Shell />
+      </SyncProvider>
     </StoreProvider>
   );
 }
 
 function Shell() {
   const store = useStore();
+  const sync = useSync();
   const [page, setPage] = useState<Page>(() => {
     const h = window.location.hash.slice(1) as Page;
     return pages.includes(h) ? h : "today";
@@ -71,6 +75,9 @@ function Shell() {
         <span className="side-profile__name">{name || "Set up your profile"}</span>
         <small>
           {days} day{days === 1 ? "" : "s"} in a row · {store.words.length} words
+        </small>
+        <small className={`side-sync side-sync--${sync.status}`}>
+          {sync.status === "off" ? "Not saved to GitHub yet" : sync.status === "error" ? "GitHub save failed" : sync.status === "saved" ? "Saved to GitHub" : "Saving to GitHub…"}
         </small>
       </span>
     </button>

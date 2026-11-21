@@ -320,3 +320,11 @@ html, body, #root { height: 100%; }
 .wdetail__ex { margin: 0; font-style: italic; color: var(--md-color-textSecondary); }
 @media (max-width: 560px) { .wcards { grid-template-columns: 1fr 1fr; } }
 @media (prefers-reduced-motion: reduce) { .wcard { animation: none; transition: none; } }
+
+/* GitHub sync */
+.side-sync { display: block; margin-top: 2px; }
+.side-sync--off, .side-sync--error { color: #f8c98a; opacity: 1 !important; }
+.sync-steps { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: var(--md-text-sm); color: var(--md-color-textSecondary); }
+.sync-steps code { font-size: var(--md-text-xs); background: var(--md-color-surfaceSunken); padding: 1px 4px; border-radius: 4px; }
+.sync-row { display: flex; gap: 8px; }
+.sync-row .md-input { flex: 1; }
