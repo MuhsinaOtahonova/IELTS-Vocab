@@ -1,3 +1,4 @@
+import { lookupWord } from "./lookup";
 import { createContext, createElement, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 // Everything is saved in this browser (localStorage). No account, no server.
@@ -11,6 +12,10 @@ export interface Word {
   image?: string;
   /** Video link, e.g. YouTube */
   video?: string;
+  /** English dictionary meaning (filled in by itself) */
+  definition?: string;
+  /** True once the site tried to fill in the meaning, example and picture */
+  looked?: boolean;
   /** Day the word was added, YYYY-MM-DD in local time */
   added: string;
   right: number;
@@ -152,13 +157,15 @@ export function bestStreak(days: Set<string>): number {
 /** A word counts as learned after 3 more right answers than wrong ones. */
 export const isLearned = (w: Word) => w.right - w.wrong >= 3;
 
-export type WordInput = Pick<Word, "word" | "meaning" | "example" | "image" | "video">;
+export type WordInput = Pick<Word, "word" | "meaning" | "example" | "image" | "video"> & { definition?: string };
 
 // ---------------------------------------------------------------------------
 // Store
 // ---------------------------------------------------------------------------
 interface Store extends State {
   today: string;
+  /** Ids of words whose meaning and picture are being looked up now */
+  lookingUp: string[];
   addWord: (w: WordInput, added?: string) => boolean;
   updateWord: (id: string, patch: Partial<WordInput>) => void;
   removeWord: (id: string) => void;
@@ -197,15 +204,46 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     const word = w.word.trim();
     const same = (x: Word) => x.word.toLowerCase() === word.toLowerCase();
     if (!word || ref.current.words.some(same)) return false;
-    const next: Word = { id: uid(), word, meaning: w.meaning.trim(), example: w.example.trim(), image: w.image?.trim() || undefined, video: w.video?.trim() || undefined, added: added ?? dayKey(), right: 0, wrong: 0 };
+    const next: Word = { id: uid(), word, meaning: w.meaning.trim(), example: w.example.trim(), image: w.image?.trim() || undefined, video: w.video?.trim() || undefined, definition: w.definition?.trim() || undefined, added: added ?? dayKey(), right: 0, wrong: 0 };
     setState((s) => (s.words.some(same) ? s : { ...s, words: [...s.words, next] }));
     return true;
   }, []);
+
+  // Fill in missing Turkish meaning, English meaning, example and picture, one word at a time.
+  const busy = useRef(new Set<string>());
+  const [lookingUp, setLookingUp] = useState<string[]>([]);
+  useEffect(() => {
+    const next = state.words.find((w) => !w.looked && !busy.current.has(w.id) && (!w.meaning || !w.image || !w.example || !w.definition));
+    if (!next) return;
+    busy.current.add(next.id);
+    setLookingUp((l) => [...l, next.id]);
+    lookupWord(next.word)
+      .catch(() => ({}) as Awaited<ReturnType<typeof lookupWord>>)
+      .then((r) => {
+        setState((s) => ({
+          ...s,
+          words: s.words.map((w) =>
+            w.id === next.id
+              ? {
+                  ...w,
+                  meaning: w.meaning || r.tr || w.definition || r.definition?.replace(/^\([a-z]+\) /, "") || "",
+                  definition: w.definition || r.definition,
+                  example: w.example || r.example || "",
+                  image: w.image || r.image,
+                  looked: true,
+                }
+              : w,
+          ),
+        }));
+        setLookingUp((l) => l.filter((id) => id !== next.id));
+      });
+  }, [state.words]);
 
   const value = useMemo<Store>(
     () => ({
       ...state,
       today,
+      lookingUp,
       addWord,
       updateWord: (id, patch) => setState((s) => ({ ...s, words: s.words.map((w) => (w.id === id ? { ...w, ...patch } : w)) })),
       removeWord: (id) => setState((s) => ({ ...s, words: s.words.filter((w) => w.id !== id) })),
@@ -221,7 +259,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         return true;
       },
     }),
-    [state, today, addWord],
+    [state, today, addWord, lookingUp],
   );
 
   return createElement(Ctx.Provider, { value }, children);

@@ -92,7 +92,12 @@ export function TodayPage({ go }: { go: (p: Page) => void }) {
                   <span className="word-list__n">{n + 1}</span>
                   <div className="word-list__text">
                     <strong>{w.word}</strong>
-                    <Text size="sm" tone="secondary">{w.meaning}</Text>
+                    {store.lookingUp.includes(w.id) ? (
+                      <Text size="sm" tone="muted" className="looking">Finding the meaning and a picture…</Text>
+                    ) : (
+                      <Text size="sm" tone="secondary">{w.meaning || "No meaning found. Edit it in My words."}</Text>
+                    )}
+                    {w.definition && w.definition !== w.meaning && <Text size="sm" tone="muted">{w.definition}</Text>}
                     {w.example && <Text size="sm" tone="muted" className="word-list__ex">{w.example}</Text>}
                     {w.video && <WordMedia video={w.video} word={w.word} />}
                   </div>

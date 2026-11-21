@@ -120,6 +120,7 @@ function Flashcards({ items, onFinish }: { items: Word[]; onFinish: (s: number, 
           <span className="flash__face flash__back">
             <WordMedia image={w.image} video={w.video} word={w.word} />
             <span className="flash__meaning">{w.meaning || "No meaning saved"}</span>
+            {w.definition && w.definition !== w.meaning && <span className="flash__def">{w.definition}</span>}
             {w.example && <span className="flash__example">“{w.example}”</span>}
           </span>
         </span>
@@ -148,7 +149,9 @@ type Q =
   | { kind: "spell"; w: Word; clue: string | null };
 
 function buildQuestions(items: Word[], all: Word[], mode: GameMode): Q[] {
-  const meanings = Array.from(new Set([...all.map((w) => w.meaning), ...ieltsWords.map((w) => w.meaning)].filter(Boolean)));
+  // Prefer the user's own meanings (usually Turkish), so all four options are in the same language.
+  const own = Array.from(new Set(all.map((w) => w.meaning).filter(Boolean)));
+  const meanings = own.length >= 4 ? own : Array.from(new Set([...own, ...ieltsWords.map((w) => w.meaning)].filter(Boolean)));
   const wordsPool = Array.from(new Set([...all.map((w) => w.word), ...ieltsWords.map((w) => w.word)]));
   const opts = (right: string, pool: string[]) => shuffle([right, ...shuffle(pool.filter((p) => norm(p) !== norm(right))).slice(0, 3)]);
   return items.map((w, idx) => {

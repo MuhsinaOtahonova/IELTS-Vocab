@@ -29,6 +29,7 @@ export function WordsPage() {
       render: (w) => (
         <div className="cell-meaning">
           {w.meaning}
+          {w.definition && w.definition !== w.meaning && <Text size="sm" tone="secondary">{w.definition}</Text>}
           {w.example && <Text size="sm" tone="muted">{w.example}</Text>}
         </div>
       ),
@@ -70,6 +71,7 @@ export function WordsPage() {
 function EditModal({ word, onClose, onSave }: { word: Word; onClose: () => void; onSave: (p: WordInput) => void }) {
   const [w, setW] = useState(word.word);
   const [m, setM] = useState(word.meaning);
+  const [d, setD] = useState(word.definition ?? "");
   const [e, setE] = useState(word.example);
   const [img, setImg] = useState(word.image);
   const [vid, setVid] = useState(word.video ?? "");
@@ -82,13 +84,14 @@ function EditModal({ word, onClose, onSave }: { word: Word; onClose: () => void;
       footer={
         <>
           <Button variant="ghost" onClick={onClose}>Cancel</Button>
-          <Button disabled={!w.trim()} onClick={() => onSave({ word: w.trim(), meaning: m.trim(), example: e.trim(), image: img, video: vid.trim() || undefined })}>Save</Button>
+          <Button disabled={!w.trim()} onClick={() => onSave({ word: w.trim(), meaning: m.trim(), definition: d.trim() || undefined, example: e.trim(), image: img, video: vid.trim() || undefined })}>Save</Button>
         </>
       }
     >
       <div className="word-form">
         <Input label="Word" value={w} onChange={(ev) => setW(ev.target.value)} />
-        <Input label="Meaning" value={m} onChange={(ev) => setM(ev.target.value)} />
+        <Input label="Meaning (Turkish)" value={m} onChange={(ev) => setM(ev.target.value)} />
+        <Input label="English meaning" optional value={d} onChange={(ev) => setD(ev.target.value)} />
         <Textarea label="Example sentence" rows={2} value={e} onChange={(ev) => setE(ev.target.value)} />
         <MediaFields word={w} image={img} onImage={setImg} video={vid} onVideo={setVid} />
       </div>
