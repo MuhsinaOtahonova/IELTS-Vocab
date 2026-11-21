@@ -1,0 +1,51 @@
+[
+ {
+  "thumb": "https://api.openverse.org/v1/images/12d48533-f49a-450d-b3dc-78ac6fd252af/thumb/",
+  "page": "https://stocksnap.io/photo/stock-market-BI0OXVDDLY",
+  "title": "Stock Market",
+  "credit": "Altered Reality · CC0 · stocksnap",
+  "file": "c1.jpg"
+ },
+ {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/%22We_will_never_accept_arbitration_downward.%22_1941.jpg/500px-%22We_will_never_accept_arbitration_downward.%22_1941.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "page": "https://commons.wikimedia.org/wiki/File:%22We_will_never_accept_arbitration_downward.%22_1941.jpg",
+  "title": "File:\"We will never accept arbitration downward.\" 1941.jpg",
+  "credit": "PM · Public domain · Wikimedia Commons",
+  "file": "c2.jpg"
+ },
+ {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/%22We_will_never_accept_arbitration_downward.%22_1941_Trim_Edit.jpg/500px-%22We_will_never_accept_arbitration_downward.%22_1941_Trim_Edit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "page": "https://commons.wikimedia.org/wiki/File:%22We_will_never_accept_arbitration_downward.%22_1941_Trim_Edit.jpg",
+  "title": "File:\"We will never accept arbitration downward.\" 1941 Trim Edit.jpg",
+  "credit": "PM · Public domain · Wikimedia Commons",
+  "file": "c3.jpg"
+ },
+ {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/16/%22We_will_never_accept_arbitration_downward.%22_1941_Trim.jpg/500px-%22We_will_never_accept_arbitration_downward.%22_1941_Trim.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "page": "https://commons.wikimedia.org/wiki/File:%22We_will_never_accept_arbitration_downward.%22_1941_Trim.jpg",
+  "title": "File:\"We will never accept arbitration downward.\" 1941 Trim.jpg",
+  "credit": "PM · Public domain · Wikimedia Commons",
+  "file": "c4.jpg"
+ },
+ {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Florida_Landfalling_Hurricane_Frequency.jpg/500px-Florida_Landfalling_Hurricane_Frequency.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "page": "https://commons.wikimedia.org/wiki/File:Florida_Landfalling_Hurricane_Frequency.jpg",
+  "title": "File:Florida Landfalling Hurricane Frequency.jpg",
+  "credit": "Data from the NOAA National Hurricane Center; chart compiled · Public domain · Wikimedia Commons",
+  "file": "c5.jpg"
+ },
+ {
+  "thumb": "https://api.openverse.org/v1/images/46c8cac7-0bd4-48d1-8262-67a0342e40e8/thumb/",
+  "page": "https://www.flickr.com/photos/86802545@N00/4516000281",
+  "title": "Pile-up Gantt Chart",
+  "credit": "hawkexpress · BY-NC-ND · flickr",
+  "file": "c6.jpg"
+ },
+ {
+  "thumb": "https://api.openverse.org/v1/images/fc4f4f28-521d-4a60-9864-019fde068813/thumb/",
+  "page": "https://www.flickr.com/photos/67499195@N00/4032198061",
+  "title": "Line chart",
+  "credit": "96dpi · BY-NC · flickr",
+  "file": "c7.jpg"
+ }
+]
