@@ -28,6 +28,41 @@ async function wikimedia(q: string): Promise<Picture[]> {
     .filter((p): p is Picture => !!p);
 }
 
+/**
+ * The main picture of the Wikipedia article about the word, e.g. "primates" -> a monkey.
+ * Only used when the article is really about this word (not a list of meanings), so
+ * the picture matches. Returns nothing otherwise, which is better than a random photo.
+ */
+export async function wikiPicture(word: string, forms: string[] = [word]): Promise<string | undefined> {
+  const names = new Set(forms.map((f) => f.toLowerCase()));
+  for (const f of forms) {
+    const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(f)}?redirect=true`);
+    if (!res.ok) continue;
+    const p = (await res.json()) as { type?: string; title?: string; thumbnail?: { source?: string; width?: number; height?: number } };
+    if (p.type !== "standard" || !p.thumbnail?.source) continue;
+    const title = (p.title ?? "").toLowerCase().replace(/\s*\(.*\)$/, "");
+    if (!names.has(title) && !forms.some((x) => title === x.toLowerCase() + "s")) continue;
+    // Skip logos, maps and flags: they are usually SVG drawings.
+    if (/\.svg/i.test(p.thumbnail.source) || /logo|flag|map|icon/i.test(p.thumbnail.source)) continue;
+    return p.thumbnail.source;
+  }
+  return undefined;
+}
+
+/**
+ * A picture drawn for the word by a free image generator (Pollinations), used when there is no
+ * real photo that fits. The address itself makes the picture, so it works for any word.
+ */
+export function drawnPicture(word: string, meaning?: string): string {
+  const hint = (meaning ?? "").replace(/^\([a-z]+\)\s*/, "").split(/[;.]/)[0].slice(0, 120);
+  const prompt = `simple friendly flat illustration that shows the meaning of the English word "${word}"${hint ? `: ${hint}` : ""}. soft colours, plain background, no text, no letters`;
+  let seed = 0;
+  for (const c of word.toLowerCase()) seed = (seed * 31 + c.charCodeAt(0)) % 100000;
+  return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=384&height=384&nologo=true&seed=${seed}`;
+}
+
+export const isDrawn = (url?: string) => !!url && url.startsWith("https://image.pollinations.ai/");
+
 export async function searchPictures(q: string): Promise<Picture[]> {
   try {
     const r = await openverse(q);
@@ -46,7 +81,7 @@ export function youtubeId(url = ""): string | null {
 export const youtubeSearch = (word: string) => `https://www.youtube.com/results?search_query=${encodeURIComponent(`${word} meaning in English`)}`;
 
 /** Pick a picture for a word: search free photos, or paste a link. */
-export function PicturePicker({ word, value, onChange }: { word: string; value?: string; onChange: (url: string | undefined) => void }) {
+export function PicturePicker({ word, meaning, value, onChange }: { word: string; meaning?: string; value?: string; onChange: (url: string | undefined) => void }) {
   const [results, setResults] = useState<Picture[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -79,6 +114,9 @@ export function PicturePicker({ word, value, onChange }: { word: string; value?:
         <Button size="sm" variant="outline" icon="image" onClick={find} disabled={loading}>
           {value ? "Change picture" : "Find pictures"}
         </Button>
+        <Button size="sm" variant="ghost" icon="edit" disabled={!word.trim()} onClick={() => (onChange(drawnPicture(word.trim(), meaning)), setResults(null))}>
+          Draw one
+        </Button>
         <Button size="sm" variant="ghost" icon="link" onClick={() => setPaste((p) => !p)}>
           Paste link
         </Button>
@@ -102,9 +140,10 @@ export function PicturePicker({ word, value, onChange }: { word: string; value?:
 /** Picture + video link shown next to a word. */
 export function WordMedia({ image, video, word, size = "md" }: { image?: string; video?: string; word: string; size?: "sm" | "md" | "lg" }) {
   const id = youtubeId(video);
+  const [broken, setBroken] = useState<string>();
   return (
     <>
-      {image && <img className={`word-img word-img--${size}`} src={image} alt={word} loading="lazy" referrerPolicy="no-referrer" />}
+      {image && broken !== image && <img className={`word-img word-img--${size}`} src={image} alt={word} loading="lazy" referrerPolicy="no-referrer" onError={() => setBroken(image)} />}
       {video && size !== "sm" && (
         <a className="word-video" href={video} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}>
           {id ? <img src={`https://i.ytimg.com/vi/${id}/mqdefault.jpg`} alt="" /> : null}

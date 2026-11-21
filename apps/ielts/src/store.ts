@@ -20,6 +20,8 @@ export interface Word {
   lv?: number;
   /** The user typed the meaning, so it is never replaced */
   ownMeaning?: boolean;
+  /** The user chose the picture (or chose none), so it is never replaced */
+  ownImage?: boolean;
   /** Day the word was added, YYYY-MM-DD in local time */
   added: string;
   right: number;
@@ -261,22 +263,23 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     const word = w.word.trim();
     const same = (x: Word) => x.word.toLowerCase() === word.toLowerCase();
     if (!word || ref.current.words.some(same)) return false;
-    const next: Word = { id: uid(), word, meaning: w.meaning.trim(), example: w.example.trim(), image: w.image?.trim() || undefined, video: w.video?.trim() || undefined, definition: w.definition?.trim() || undefined, ownMeaning: !!w.meaning.trim() || undefined, added: added ?? dayKey(), right: 0, wrong: 0 };
+    const next: Word = { id: uid(), word, meaning: w.meaning.trim(), example: w.example.trim(), image: w.image?.trim() || undefined, video: w.video?.trim() || undefined, definition: w.definition?.trim() || undefined, ownMeaning: !!w.meaning.trim() || undefined, ownImage: !!w.image?.trim() || undefined, added: added ?? dayKey(), right: 0, wrong: 0 };
     setState((s) => (s.words.some(same) ? s : { ...s, words: [...s.words, next], removed: (s.removed ?? []).filter((r) => r !== word.toLowerCase()) }));
     return true;
   }, []);
 
-  // Version 2 switched to dictionary-style Turkish meanings; older words are refreshed once.
-  const LOOKUP_VERSION = 2;
+  // Version 2 switched to dictionary-style Turkish meanings. Version 3 replaced the random photo
+  // search with matching pictures (Wikipedia, or a drawn one). Older words are refreshed once.
+  const LOOKUP_VERSION = 3;
   // Fill in missing Turkish meaning, English meaning, example and picture, one word at a time.
   const busy = useRef(new Set<string>());
   const [lookingUp, setLookingUp] = useState<string[]>([]);
   useEffect(() => {
-    const next = state.words.find((w) => !busy.current.has(w.id) && (w.lv ?? 0) < LOOKUP_VERSION && (!w.looked || !w.ownMeaning));
+    const next = state.words.find((w) => !busy.current.has(w.id) && (w.lv ?? 0) < LOOKUP_VERSION);
     if (!next) return;
     busy.current.add(next.id);
     setLookingUp((l) => [...l, next.id]);
-    lookupWord(next.word, { picture: !next.image })
+    lookupWord(next.word, { picture: !next.ownImage, hint: next.definition })
       .catch(() => ({}) as Awaited<ReturnType<typeof lookupWord>>)
       .then((r) => {
         setState((s) => ({
@@ -289,7 +292,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
                   // Keep a hand-made English meaning (IELTS list or typed); refresh one that came from the dictionary.
                   definition: w.definition && !/^\([a-z]+\) /.test(w.definition) ? w.definition : r.definition || w.definition,
                   example: w.example || r.example || "",
-                  image: w.image || r.image,
+                  image: w.ownImage ? w.image : r.image || w.image,
                   looked: true,
                   lv: LOOKUP_VERSION,
                 }
@@ -311,7 +314,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         setState((s) => ({
           ...s,
           words: s.words.map((w) =>
-            w.id === id ? { ...w, ...patch, ownMeaning: patch.meaning !== undefined && patch.meaning !== w.meaning ? true : w.ownMeaning } : w,
+            w.id === id
+              ? {
+                  ...w,
+                  ...patch,
+                  ownMeaning: patch.meaning !== undefined && patch.meaning !== w.meaning ? true : w.ownMeaning,
+                  ownImage: "image" in patch && patch.image !== w.image ? true : w.ownImage,
+                }
+              : w,
           ),
         })),
       relookup: (id) => {

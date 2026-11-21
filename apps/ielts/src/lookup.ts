@@ -1,10 +1,11 @@
-import { searchPictures } from "./media";
+import { drawnPicture, wikiPicture } from "./media";
 
 // Fills in a word by itself, using free services that need no key and work from the browser:
 //   Turkish meaning  -> Google Translate's public web endpoint (dictionary entries, 2-3 meanings),
 //                       MyMemory translation API as fallback
 //   English meaning and example -> Free Dictionary API (dictionaryapi.dev)
-//   Picture          -> Openverse, with Wikimedia Commons as fallback (see media.tsx)
+//   Picture          -> the Wikipedia article for the word, only for nouns (see media.tsx).
+//                       Otherwise (adjectives, verbs, no article) a picture is drawn for it (Pollinations).
 export interface LookupResult {
   tr?: string;
   definition?: string;
@@ -97,13 +98,17 @@ export async function englishEntry(word: string, pos?: string): Promise<{ defini
   return {};
 }
 
-export async function lookupWord(word: string, opts: { picture?: boolean } = {}): Promise<LookupResult> {
+export async function lookupWord(word: string, opts: { picture?: boolean; hint?: string } = {}): Promise<LookupResult> {
   const tr = await turkishMeaning(word);
-  const [en, pics] = await Promise.allSettled([englishEntry(word, tr.pos), opts.picture === false ? Promise.resolve([]) : searchPictures(word)]);
+  const wantPicture = opts.picture !== false && (!tr.pos || tr.pos.toLowerCase() === "noun");
+  const [en, pic] = await Promise.allSettled([englishEntry(word, tr.pos), wantPicture ? wikiPicture(word, forms(word)) : Promise.resolve(undefined)]);
+  const definition = en.status === "fulfilled" ? en.value.definition : undefined;
+  const photo = pic.status === "fulfilled" ? pic.value : undefined;
   return {
     tr: tr.tr,
-    definition: en.status === "fulfilled" ? en.value.definition : undefined,
+    definition,
     example: en.status === "fulfilled" ? en.value.example : undefined,
-    image: pics.status === "fulfilled" ? pics.value[0]?.thumb : undefined,
+    // No real photo that fits (or not a noun): draw one from the word and its meaning.
+    image: opts.picture === false ? undefined : photo || drawnPicture(word, definition || opts.hint),
   };
 }
