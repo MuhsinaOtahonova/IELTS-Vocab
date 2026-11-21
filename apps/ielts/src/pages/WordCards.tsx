@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, Modal, Text } from "@my-design/ui-web";
 import { useStore, type Word } from "../store";
 import { PicturePicker, WordMedia } from "../media";
+import { pictureCredit } from "../pictures";
 
 /** Compact grid of word cards. Shows a few, "Show all" for the rest; click a card for details. */
 export function WordCards({ words, initial = 12 }: { words: Word[]; initial?: number }) {
@@ -72,6 +73,7 @@ function WordDetail({ word: w, onClose }: { word: Word; onClose: () => void }) {
     >
       <div className="wdetail">
         {w.image && <WordMedia image={w.image} word={w.word} size="lg" />}
+        {pictureCredit(w.image) && <Text size="sm" tone="muted" className="wdetail__credit">Picture: {pictureCredit(w.image)}</Text>}
         {picking ? (
           <PicturePicker word={w.word} meaning={w.definition} value={w.image} onChange={(url) => updateWord(w.id, { image: url })} />
         ) : (
