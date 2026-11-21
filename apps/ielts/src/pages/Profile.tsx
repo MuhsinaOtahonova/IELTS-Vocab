@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Button, Card, CardHeader, Input, ProfileHeader, Select, Text, Textarea, useToast } from "@my-design/ui-web";
 import { activeDays, dayKey, formatDay, isLearned, parseDay, streak, useStore } from "../store";
 import { PageHeader } from "./common";
+import { AccountCard } from "./Account";
 
 const bands = ["5.0", "5.5", "6.0", "6.5", "7.0", "7.5", "8.0", "8.5", "9.0"];
 
@@ -155,10 +156,12 @@ export function ProfilePage() {
             </div>
           </Card>
 
+          <AccountCard />
+
           <Card>
-            <CardHeader title="Backup" />
+            <CardHeader title="Backup file" />
             <div className="md-card__body word-form">
-              <Text size="sm" tone="muted">Your words and profile are saved only in this browser. Download a backup to move them to another device.</Text>
+              <Text size="sm" tone="muted">Download a copy of everything as a file. Restore adds the words from a file to the ones here; it never deletes any.</Text>
               <div className="word-form__actions">
                 <Button size="sm" variant="outline" icon="download" onClick={exportFile}>Download backup</Button>
                 <Button size="sm" variant="ghost" icon="upload" onClick={() => fileRef.current?.click()}>Restore</Button>

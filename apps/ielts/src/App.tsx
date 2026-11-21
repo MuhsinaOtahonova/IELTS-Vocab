@@ -1,26 +1,85 @@
 import { useEffect, useState } from "react";
-import { Avatar, BottomNav, Drawer, IconButton, Logo, NavItem, NavSection, Sidebar, Text, Topbar, useTheme } from "@my-design/ui-web";
-import { activeDays, isFriday, saveTheme, streak, StoreProvider, useStore } from "./store";
+import { Avatar, BottomNav, Button, Drawer, IconButton, Logo, Modal, NavItem, NavSection, Sidebar, Spinner, Text, Topbar, useTheme } from "@my-design/ui-web";
+import { accountKey, activeDays, isFriday, saveTheme, streak, StoreProvider, useStore } from "./store";
 import { TodayPage } from "./pages/Today";
 import { PracticePage } from "./pages/Practice";
 import { FridayPage } from "./pages/Friday";
 import { WordsPage } from "./pages/Words";
 import { ProgressPage } from "./pages/Progress";
 import { ProfilePage } from "./pages/Profile";
+import { LoginPage } from "./pages/Login";
+import { hasAccounts } from "./firebase";
+import { AuthProvider, useAuth } from "./auth";
+import { CloudProvider, useCloud, type CloudStatus } from "./cloud";
 
 export type Page = "today" | "practice" | "friday" | "words" | "progress" | "profile";
 const pages: Page[] = ["today", "practice", "friday", "words", "progress", "profile"];
 
 export function App() {
+  // Until Firebase is set up (see firebase.ts) the site works as before: no sign-in, saved in this browser.
+  if (!hasAccounts)
+    return (
+      <StoreProvider>
+        <Shell />
+      </StoreProvider>
+    );
   return (
-    <StoreProvider>
-      <Shell />
+    <AuthProvider>
+      <Gate />
+    </AuthProvider>
+  );
+}
+
+/** Sign-in page first; after signing in, that person's own words and profile. */
+function Gate() {
+  const { user } = useAuth();
+  if (user === undefined)
+    return (
+      <div className="boot">
+        <Spinner size={28} label="Loading" />
+      </div>
+    );
+  if (!user) return <LoginPage />;
+  const key = accountKey(user.uid);
+  return (
+    <StoreProvider key={user.uid} storageKey={key}>
+      <CloudProvider user={user} storageKey={key}>
+        <Shell />
+        <GuestWords />
+      </CloudProvider>
     </StoreProvider>
   );
 }
 
+/** Offers the words saved in this browser before accounts existed. Nothing is deleted either way. */
+function GuestWords() {
+  const cloud = useCloud();
+  if (!cloud?.guestWords) return null;
+  return (
+    <Modal
+      open
+      onClose={cloud.skipGuestWords}
+      size="sm"
+      title="Add your saved words?"
+      footer={
+        <>
+          <Button variant="ghost" onClick={cloud.skipGuestWords}>They are not mine</Button>
+          <Button onClick={cloud.addGuestWords}>Add {cloud.guestWords} words</Button>
+        </>
+      }
+    >
+      <Text>
+        This browser has <strong>{cloud.guestWords} words</strong> that were saved before you signed in. Add them to your account, so you can see them on every device?
+      </Text>
+    </Modal>
+  );
+}
+
+const cloudText: Record<CloudStatus, string> = { loading: "Opening your account…", saving: "Saving…", saved: "Saved to your account", error: "Not saved, will try again" };
+
 function Shell() {
   const store = useStore();
+  const cloud = useCloud();
   const [page, setPage] = useState<Page>(() => {
     const h = window.location.hash.slice(1) as Page;
     return pages.includes(h) ? h : "today";
@@ -72,6 +131,7 @@ function Shell() {
         <small>
           {days} day{days === 1 ? "" : "s"} in a row · {store.words.length} words
         </small>
+        {cloud && <small className={`side-sync side-sync--${cloud.status}`}>{cloudText[cloud.status]}</small>}
       </span>
     </button>
   );

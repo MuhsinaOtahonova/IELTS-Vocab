@@ -1,7 +1,8 @@
 import { lookupWord } from "./lookup";
 import { createContext, createElement, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
-// Everything is saved in this browser (localStorage). No account, no server.
+// Everything is kept in this browser (localStorage). When the person signs in, the same data is
+// also saved to their account (see cloud.tsx), so it is there on every device.
 
 export interface Word {
   id: string;
@@ -20,6 +21,8 @@ export interface Word {
   lv?: number;
   /** The user typed the meaning, so it is never replaced */
   ownMeaning?: boolean;
+  /** The user chose the picture (or chose none), so it is never replaced */
+  ownImage?: boolean;
   /** Day the word was added, YYYY-MM-DD in local time */
   added: string;
   right: number;
@@ -50,24 +53,74 @@ export interface Settings {
   examDate?: string;
 }
 
-interface State {
+export interface State {
   words: Word[];
   results: Result[];
   settings: Settings;
+  /** Words deleted on purpose (lower case), so a sync does not bring them back */
+  removed?: string[];
 }
 
-const KEY = "ielts-words.v1";
+/** Words saved before accounts existed (or with no account) live under this key. */
+export const KEY = "ielts-words.v1";
+/** Each account keeps its own copy in this browser, so two people never see each other's words. */
+export const accountKey = (uid: string) => `${KEY}.u.${uid}`;
 const THEME_KEY = "ielts-words.theme";
 const empty: State = { words: [], results: [], settings: { name: "", goal: 10 } };
 
-function load(): State {
+export function load(key = KEY): State {
   try {
-    const raw = localStorage.getItem(KEY);
+    const raw = localStorage.getItem(key);
     if (!raw) return empty;
     const s = JSON.parse(raw) as Partial<State>;
-    return { words: s.words ?? [], results: s.results ?? [], settings: { ...empty.settings, ...s.settings } };
+    return { words: s.words ?? [], results: s.results ?? [], settings: { ...empty.settings, ...s.settings }, removed: s.removed ?? [] };
   } catch {
     return empty;
+  }
+}
+
+/**
+ * Combines two saved copies (this browser + GitHub, or + a backup file) without losing words.
+ * Every word from both sides is kept, unless it was deleted on purpose. When the same word is on
+ * both sides, the copy with more practice wins, and empty fields are filled from the other copy.
+ */
+export function mergeStates(a: State, b: Partial<State>): State {
+  const removed = Array.from(new Set([...(a.removed ?? []), ...(b.removed ?? [])]));
+  const gone = new Set(removed);
+  const byWord = new Map<string, Word>();
+  for (const w of [...a.words, ...(b.words ?? [])]) {
+    if (!w || typeof w.word !== "string") continue;
+    const k = w.word.toLowerCase();
+    const old = byWord.get(k);
+    if (!old) {
+      byWord.set(k, w);
+      continue;
+    }
+    const [win, other] = w.right + w.wrong > old.right + old.wrong ? [w, old] : [old, w];
+    byWord.set(k, {
+      ...other,
+      ...Object.fromEntries(Object.entries(win).filter(([, v]) => v !== undefined && v !== "")),
+      added: old.added < w.added ? old.added : w.added,
+    } as Word);
+  }
+  const words = [...byWord.values()].filter((w) => !gone.has(w.word.toLowerCase())).sort((x, y) => (x.added < y.added ? -1 : x.added > y.added ? 1 : 0));
+  const seen = new Set<string>();
+  const results = [...a.results, ...(b.results ?? [])].filter((r) => {
+    const k = `${r.date}|${r.kind}|${r.label}|${r.score}|${r.total}`;
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+  const settings = { ...empty.settings, ...b.settings, ...Object.fromEntries(Object.entries(a.settings).filter(([, v]) => v !== undefined && v !== "")) } as Settings;
+  return { words, results, settings, removed };
+}
+
+/** Keeps the last copy before a big change, just in case. */
+export function snapshot(s: State, key = KEY) {
+  try {
+    localStorage.setItem(key + ".before-sync", JSON.stringify(s));
+  } catch {
+    /* ignore */
   }
 }
 
@@ -179,6 +232,12 @@ interface Store extends State {
   addResult: (r: Omit<Result, "date">) => void;
   setSettings: (p: Partial<Settings>) => void;
   replaceAll: (s: unknown) => boolean;
+  /** Adds words from another copy (e.g. the account) without deleting anything */
+  mergeIn: (remote: Partial<State>) => void;
+  /** Takes in changes made on another device (their version wins) */
+  applyRemote: (fn: (s: State) => State) => void;
+  /** The whole saved state, for syncing */
+  state: State;
   exportJson: () => string;
 }
 
@@ -186,17 +245,17 @@ const Ctx = createContext<Store | null>(null);
 
 const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 
-export function StoreProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<State>(load);
+export function StoreProvider({ children, storageKey = KEY }: { children: ReactNode; storageKey?: string }) {
+  const [state, setState] = useState<State>(() => load(storageKey));
   const [today, setToday] = useState(dayKey);
 
   useEffect(() => {
     try {
-      localStorage.setItem(KEY, JSON.stringify(state));
+      localStorage.setItem(storageKey, JSON.stringify(state));
     } catch {
       /* storage full or blocked: keep working in memory */
     }
-  }, [state]);
+  }, [state, storageKey]);
 
   // Notice when midnight passes while the tab stays open.
   useEffect(() => {
@@ -210,22 +269,23 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     const word = w.word.trim();
     const same = (x: Word) => x.word.toLowerCase() === word.toLowerCase();
     if (!word || ref.current.words.some(same)) return false;
-    const next: Word = { id: uid(), word, meaning: w.meaning.trim(), example: w.example.trim(), image: w.image?.trim() || undefined, video: w.video?.trim() || undefined, definition: w.definition?.trim() || undefined, ownMeaning: !!w.meaning.trim() || undefined, added: added ?? dayKey(), right: 0, wrong: 0 };
-    setState((s) => (s.words.some(same) ? s : { ...s, words: [...s.words, next] }));
+    const next: Word = { id: uid(), word, meaning: w.meaning.trim(), example: w.example.trim(), image: w.image?.trim() || undefined, video: w.video?.trim() || undefined, definition: w.definition?.trim() || undefined, ownMeaning: !!w.meaning.trim() || undefined, ownImage: !!w.image?.trim() || undefined, added: added ?? dayKey(), right: 0, wrong: 0 };
+    setState((s) => (s.words.some(same) ? s : { ...s, words: [...s.words, next], removed: (s.removed ?? []).filter((r) => r !== word.toLowerCase()) }));
     return true;
   }, []);
 
-  // Version 2 switched to dictionary-style Turkish meanings; older words are refreshed once.
-  const LOOKUP_VERSION = 2;
+  // Version 2 switched to dictionary-style Turkish meanings. Version 3 replaced the random photo
+  // search with matching pictures (Wikipedia, or a drawn one). Older words are refreshed once.
+  const LOOKUP_VERSION = 3;
   // Fill in missing Turkish meaning, English meaning, example and picture, one word at a time.
   const busy = useRef(new Set<string>());
   const [lookingUp, setLookingUp] = useState<string[]>([]);
   useEffect(() => {
-    const next = state.words.find((w) => !busy.current.has(w.id) && (w.lv ?? 0) < LOOKUP_VERSION && (!w.looked || !w.ownMeaning));
+    const next = state.words.find((w) => !busy.current.has(w.id) && (w.lv ?? 0) < LOOKUP_VERSION);
     if (!next) return;
     busy.current.add(next.id);
     setLookingUp((l) => [...l, next.id]);
-    lookupWord(next.word, { picture: !next.image })
+    lookupWord(next.word, { picture: !next.ownImage, hint: next.definition })
       .catch(() => ({}) as Awaited<ReturnType<typeof lookupWord>>)
       .then((r) => {
         setState((s) => ({
@@ -238,7 +298,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
                   // Keep a hand-made English meaning (IELTS list or typed); refresh one that came from the dictionary.
                   definition: w.definition && !/^\([a-z]+\) /.test(w.definition) ? w.definition : r.definition || w.definition,
                   example: w.example || r.example || "",
-                  image: w.image || r.image,
+                  image: w.ownImage ? w.image : r.image || w.image,
                   looked: true,
                   lv: LOOKUP_VERSION,
                 }
@@ -252,6 +312,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const value = useMemo<Store>(
     () => ({
       ...state,
+      state,
       today,
       lookingUp,
       addWord,
@@ -259,14 +320,25 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         setState((s) => ({
           ...s,
           words: s.words.map((w) =>
-            w.id === id ? { ...w, ...patch, ownMeaning: patch.meaning !== undefined && patch.meaning !== w.meaning ? true : w.ownMeaning } : w,
+            w.id === id
+              ? {
+                  ...w,
+                  ...patch,
+                  ownMeaning: patch.meaning !== undefined && patch.meaning !== w.meaning ? true : w.ownMeaning,
+                  ownImage: "image" in patch && patch.image !== w.image ? true : w.ownImage,
+                }
+              : w,
           ),
         })),
       relookup: (id) => {
         busy.current.delete(id);
         setState((s) => ({ ...s, words: s.words.map((w) => (w.id === id ? { ...w, lv: 0, looked: false, ownMeaning: false } : w)) }));
       },
-      removeWord: (id) => setState((s) => ({ ...s, words: s.words.filter((w) => w.id !== id) })),
+      removeWord: (id) =>
+        setState((s) => {
+          const w = s.words.find((x) => x.id === id);
+          return { ...s, words: s.words.filter((x) => x.id !== id), removed: w ? [...(s.removed ?? []), w.word.toLowerCase()] : s.removed };
+        }),
       mark: (id, correct) =>
         setState((s) => ({ ...s, words: s.words.map((w) => (w.id === id ? { ...w, right: w.right + (correct ? 1 : 0), wrong: w.wrong + (correct ? 0 : 1) } : w)) })),
       addResult: (r) => setState((s) => ({ ...s, results: [...s.results, { ...r, date: dayKey() }] })),
@@ -275,9 +347,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       replaceAll: (raw) => {
         const s = raw as Partial<State> | null;
         if (!s || !Array.isArray(s.words)) return false;
-        setState({ words: s.words, results: Array.isArray(s.results) ? s.results : [], settings: { ...empty.settings, ...s.settings } });
+        // Restoring adds the backup's words to the ones here; nothing is deleted.
+        snapshot(ref.current);
+        setState((cur) => mergeStates(cur, s));
         return true;
       },
+      mergeIn: (remote) => setState((cur) => mergeStates(cur, remote)),
+      applyRemote: setState,
     }),
     [state, today, addWord, lookingUp],
   );

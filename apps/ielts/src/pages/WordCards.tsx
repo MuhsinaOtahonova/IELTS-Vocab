@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Modal, Text } from "@my-design/ui-web";
 import { useStore, type Word } from "../store";
-import { WordMedia } from "../media";
+import { PicturePicker, WordMedia } from "../media";
 
 /** Compact grid of word cards. Shows a few, "Show all" for the rest; click a card for details. */
 export function WordCards({ words, initial = 12 }: { words: Word[]; initial?: number }) {
@@ -19,7 +19,7 @@ export function WordCards({ words, initial = 12 }: { words: Word[]; initial?: nu
           return (
             <li key={w.id}>
               <button type="button" className="wcard" onClick={() => setOpen(w.id)}>
-                {w.image ? <img className="wcard__img" src={w.image} alt="" loading="lazy" referrerPolicy="no-referrer" /> : <span className="wcard__img wcard__img--empty">{w.word[0]}</span>}
+                <CardPicture image={w.image} word={w.word} />
                 <span className="wcard__text">
                   <span className="wcard__word">{w.word}</span>
                   <span className="wcard__meaning">{busy ? "Looking up…" : w.meaning || "No meaning yet"}</span>
@@ -41,8 +41,16 @@ export function WordCards({ words, initial = 12 }: { words: Word[]; initial?: nu
   );
 }
 
+/** The card's picture; a letter tile while there is none, or when the picture does not load. */
+function CardPicture({ image, word }: { image?: string; word: string }) {
+  const [broken, setBroken] = useState<string>();
+  if (!image || broken === image) return <span className="wcard__img wcard__img--empty">{word[0]}</span>;
+  return <img className="wcard__img" src={image} alt="" loading="lazy" referrerPolicy="no-referrer" onError={() => setBroken(image)} />;
+}
+
 function WordDetail({ word: w, onClose }: { word: Word; onClose: () => void }) {
-  const { removeWord, relookup, lookingUp } = useStore();
+  const { removeWord, relookup, lookingUp, updateWord } = useStore();
+  const [picking, setPicking] = useState(false);
   const busy = lookingUp.includes(w.id);
   return (
     <Modal
@@ -64,6 +72,15 @@ function WordDetail({ word: w, onClose }: { word: Word; onClose: () => void }) {
     >
       <div className="wdetail">
         {w.image && <WordMedia image={w.image} word={w.word} size="lg" />}
+        {picking ? (
+          <PicturePicker word={w.word} meaning={w.definition} value={w.image} onChange={(url) => updateWord(w.id, { image: url })} />
+        ) : (
+          <div>
+            <Button size="sm" variant="outline" icon="image" onClick={() => setPicking(true)}>
+              {w.image ? "Change picture" : "Add a picture"}
+            </Button>
+          </div>
+        )}
         <div>
           <Text size="sm" tone="muted">Türkçe</Text>
           <Text weight="semibold">{busy ? "Looking up…" : w.meaning || "No meaning yet"}</Text>
