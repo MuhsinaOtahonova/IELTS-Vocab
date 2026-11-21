@@ -16,6 +16,10 @@ export interface Word {
   definition?: string;
   /** True once the site tried to fill in the meaning, example and picture */
   looked?: boolean;
+  /** Version of the lookup that filled this word; older ones are looked up again */
+  lv?: number;
+  /** The user typed the meaning, so it is never replaced */
+  ownMeaning?: boolean;
   /** Day the word was added, YYYY-MM-DD in local time */
   added: string;
   right: number;
@@ -169,6 +173,8 @@ interface Store extends State {
   addWord: (w: WordInput, added?: string) => boolean;
   updateWord: (id: string, patch: Partial<WordInput>) => void;
   removeWord: (id: string) => void;
+  /** Look up the meaning, English meaning and example again */
+  relookup: (id: string) => void;
   mark: (id: string, correct: boolean) => void;
   addResult: (r: Omit<Result, "date">) => void;
   setSettings: (p: Partial<Settings>) => void;
@@ -204,20 +210,22 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     const word = w.word.trim();
     const same = (x: Word) => x.word.toLowerCase() === word.toLowerCase();
     if (!word || ref.current.words.some(same)) return false;
-    const next: Word = { id: uid(), word, meaning: w.meaning.trim(), example: w.example.trim(), image: w.image?.trim() || undefined, video: w.video?.trim() || undefined, definition: w.definition?.trim() || undefined, added: added ?? dayKey(), right: 0, wrong: 0 };
+    const next: Word = { id: uid(), word, meaning: w.meaning.trim(), example: w.example.trim(), image: w.image?.trim() || undefined, video: w.video?.trim() || undefined, definition: w.definition?.trim() || undefined, ownMeaning: !!w.meaning.trim() || undefined, added: added ?? dayKey(), right: 0, wrong: 0 };
     setState((s) => (s.words.some(same) ? s : { ...s, words: [...s.words, next] }));
     return true;
   }, []);
 
+  // Version 2 switched to dictionary-style Turkish meanings; older words are refreshed once.
+  const LOOKUP_VERSION = 2;
   // Fill in missing Turkish meaning, English meaning, example and picture, one word at a time.
   const busy = useRef(new Set<string>());
   const [lookingUp, setLookingUp] = useState<string[]>([]);
   useEffect(() => {
-    const next = state.words.find((w) => !w.looked && !busy.current.has(w.id) && (!w.meaning || !w.image || !w.example || !w.definition));
+    const next = state.words.find((w) => !busy.current.has(w.id) && (w.lv ?? 0) < LOOKUP_VERSION && (!w.looked || !w.ownMeaning));
     if (!next) return;
     busy.current.add(next.id);
     setLookingUp((l) => [...l, next.id]);
-    lookupWord(next.word)
+    lookupWord(next.word, { picture: !next.image })
       .catch(() => ({}) as Awaited<ReturnType<typeof lookupWord>>)
       .then((r) => {
         setState((s) => ({
@@ -226,11 +234,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
             w.id === next.id
               ? {
                   ...w,
-                  meaning: w.meaning || r.tr || w.definition || r.definition?.replace(/^\([a-z]+\) /, "") || "",
-                  definition: w.definition || r.definition,
+                  meaning: w.ownMeaning ? w.meaning : r.tr || w.meaning || w.definition || r.definition?.replace(/^\([a-z]+\) /, "") || "",
+                  // Keep a hand-made English meaning (IELTS list or typed); refresh one that came from the dictionary.
+                  definition: w.definition && !/^\([a-z]+\) /.test(w.definition) ? w.definition : r.definition || w.definition,
                   example: w.example || r.example || "",
                   image: w.image || r.image,
                   looked: true,
+                  lv: LOOKUP_VERSION,
                 }
               : w,
           ),
@@ -245,7 +255,17 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       today,
       lookingUp,
       addWord,
-      updateWord: (id, patch) => setState((s) => ({ ...s, words: s.words.map((w) => (w.id === id ? { ...w, ...patch } : w)) })),
+      updateWord: (id, patch) =>
+        setState((s) => ({
+          ...s,
+          words: s.words.map((w) =>
+            w.id === id ? { ...w, ...patch, ownMeaning: patch.meaning !== undefined && patch.meaning !== w.meaning ? true : w.ownMeaning } : w,
+          ),
+        })),
+      relookup: (id) => {
+        busy.current.delete(id);
+        setState((s) => ({ ...s, words: s.words.map((w) => (w.id === id ? { ...w, lv: 0, looked: false, ownMeaning: false } : w)) }));
+      },
       removeWord: (id) => setState((s) => ({ ...s, words: s.words.filter((w) => w.id !== id) })),
       mark: (id, correct) =>
         setState((s) => ({ ...s, words: s.words.map((w) => (w.id === id ? { ...w, right: w.right + (correct ? 1 : 0), wrong: w.wrong + (correct ? 0 : 1) } : w)) })),

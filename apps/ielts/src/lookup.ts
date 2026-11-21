@@ -1,7 +1,8 @@
 import { searchPictures } from "./media";
 
 // Fills in a word by itself, using free services that need no key and work from the browser:
-//   Turkish meaning  -> MyMemory translation API
+//   Turkish meaning  -> Google Translate's public web endpoint (dictionary entries, 2-3 meanings),
+//                       MyMemory translation API as fallback
 //   English meaning and example -> Free Dictionary API (dictionaryapi.dev)
 //   Picture          -> Openverse, with Wikimedia Commons as fallback (see media.tsx)
 export interface LookupResult {
@@ -25,11 +26,41 @@ async function getJson<T>(url: string, ms = 8000): Promise<T> {
   }
 }
 
+/** Dictionary-style meanings, e.g. gut -> "bağırsak, içgüdü". Also returns the main part of speech. */
+async function googleTurkish(word: string): Promise<{ tr?: string; pos?: string }> {
+  type G = [Array<[string, ...unknown[]]> | null, Array<[string, string[], ...unknown[]]> | null, ...unknown[]];
+  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=tr&hl=en&dt=t&dt=bd&q=${encodeURIComponent(word)}`;
+  const data = await getJson<G>(url);
+  const dict = data?.[1];
+  if (Array.isArray(dict) && dict.length) {
+    const [pos, terms] = dict[0];
+    const top = Array.from(new Set((terms ?? []).map(clean).filter(Boolean))).slice(0, 3);
+    if (top.length) return { tr: top.join(", "), pos };
+  }
+  const main = clean((data?.[0] ?? []).map((x) => (typeof x?.[0] === "string" ? x[0] : "")).join(""));
+  if (main && main.toLowerCase() !== word.toLowerCase()) return { tr: main.charAt(0).toLocaleLowerCase("tr-TR") + main.slice(1) };
+  return {};
+}
+
+export async function turkishMeaning(word: string): Promise<{ tr?: string; pos?: string }> {
+  try {
+    const g = await googleTurkish(word);
+    if (g.tr) return g;
+  } catch {
+    /* fall back to MyMemory */
+  }
+  try {
+    return { tr: await translateToTurkish(word) };
+  } catch {
+    return {};
+  }
+}
+
 export async function translateToTurkish(text: string): Promise<string | undefined> {
   type R = { responseStatus?: number; responseData?: { translatedText?: string } };
   const r = await getJson<R>(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|tr`);
   const out = clean(r.responseData?.translatedText ?? "");
-  if (!out || /MYMEMORY|QUERY LENGTH|INVALID/i.test(out) || out.toLowerCase() === text.toLowerCase()) return undefined;
+  if (!out || /MYMEMORY|QUERY LENGTH|INVALID/i.test(out) || out.toLowerCase().includes(text.toLowerCase())) return undefined;
   return out.toLocaleLowerCase("tr-TR") === out ? out : out.charAt(0).toLocaleLowerCase("tr-TR") + out.slice(1);
 }
 
@@ -43,15 +74,18 @@ function forms(word: string): string[] {
   return out;
 }
 
-export async function englishEntry(word: string): Promise<{ definition?: string; example?: string }> {
+export async function englishEntry(word: string, pos?: string): Promise<{ definition?: string; example?: string }> {
   type Entry = { meanings?: Array<{ partOfSpeech?: string; definitions?: Array<{ definition?: string; example?: string }> }> };
   for (const f of forms(word)) {
     try {
       const data = await getJson<Entry[]>(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(f)}`);
       const defs = (data ?? []).flatMap((e) => (e.meanings ?? []).flatMap((m) => (m.definitions ?? []).map((d) => ({ ...d, pos: m.partOfSpeech }))));
       if (!defs.length) continue;
-      const first = defs[0];
-      const withExample = defs.find((d) => d.example);
+      // Use the same part of speech as the Turkish meaning, so both describe the same sense.
+      const same = pos ? defs.filter((d) => d.pos === pos.toLowerCase()) : [];
+      const pool = same.length ? same : defs;
+      const first = pool[0];
+      const withExample = pool.find((d) => d.example) ?? defs.find((d) => d.example);
       return {
         definition: first.definition ? clean(`${first.pos ? `(${first.pos}) ` : ""}${first.definition}`) : undefined,
         example: withExample?.example ? clean(withExample.example) : undefined,
@@ -63,10 +97,11 @@ export async function englishEntry(word: string): Promise<{ definition?: string;
   return {};
 }
 
-export async function lookupWord(word: string): Promise<LookupResult> {
-  const [tr, en, pics] = await Promise.allSettled([translateToTurkish(word), englishEntry(word), searchPictures(word)]);
+export async function lookupWord(word: string, opts: { picture?: boolean } = {}): Promise<LookupResult> {
+  const tr = await turkishMeaning(word);
+  const [en, pics] = await Promise.allSettled([englishEntry(word, tr.pos), opts.picture === false ? Promise.resolve([]) : searchPictures(word)]);
   return {
-    tr: tr.status === "fulfilled" ? tr.value : undefined,
+    tr: tr.tr,
     definition: en.status === "fulfilled" ? en.value.definition : undefined,
     example: en.status === "fulfilled" ? en.value.example : undefined,
     image: pics.status === "fulfilled" ? pics.value[0]?.thumb : undefined,

@@ -303,3 +303,20 @@ html, body, #root { height: 100%; }
 .word-form__more:hover { text-decoration: underline; }
 .looking { font-style: italic; }
 .flash__def { font-size: var(--md-text-sm); color: var(--md-color-textSecondary); max-width: 460px; }
+
+/* Compact word cards */
+.wcards { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+.wcard { all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px; border: 1px solid var(--md-color-border); border-radius: var(--md-radius-md); background: var(--md-color-surface); transition: transform var(--md-duration-fast) var(--md-ease-spring), box-shadow var(--md-duration-normal), border-color var(--md-duration-fast); animation: md-word-in var(--md-duration-slow) var(--md-ease-spring) both; }
+.wcard:hover { transform: translateY(-2px); box-shadow: var(--md-depth-2); border-color: var(--md-color-borderStrong); }
+.wcard:focus-visible { outline: 2px solid var(--md-color-focus); outline-offset: 2px; }
+.wcard__img { width: 40px; height: 40px; flex: none; border-radius: var(--md-radius-sm); object-fit: cover; background: var(--md-color-surfaceSunken); }
+.wcard__img--empty { display: grid; place-items: center; font-weight: 700; text-transform: uppercase; color: var(--md-color-primaryText); background: var(--md-color-primarySoft); }
+.wcard__text { display: flex; flex-direction: column; min-width: 0; }
+.wcard__word { font-weight: 600; color: var(--md-color-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wcard__meaning { font-size: var(--md-text-sm); color: var(--md-color-textSecondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wcards__more { display: flex; justify-content: center; margin-top: 10px; }
+.wdetail { display: flex; flex-direction: column; gap: 12px; }
+.wdetail .word-img--lg { height: 200px; max-width: 100%; }
+.wdetail__ex { margin: 0; font-style: italic; color: var(--md-color-textSecondary); }
+@media (max-width: 560px) { .wcards { grid-template-columns: 1fr 1fr; } }
+@media (prefers-reduced-motion: reduce) { .wcard { animation: none; transition: none; } }

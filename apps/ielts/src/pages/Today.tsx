@@ -5,7 +5,7 @@ import type { Page } from "../App";
 import { activeDays, daysToFriday, formatDay, isFriday, streak, useStore } from "../store";
 import { greeting, messageOfTheDay } from "../motivation";
 import { WordForm, WordListModal } from "./common";
-import { WordMedia } from "../media";
+import { WordCards } from "./WordCards";
 
 export function TodayPage({ go }: { go: (p: Page) => void }) {
   const store = useStore();
@@ -86,26 +86,7 @@ export function TodayPage({ go }: { go: (p: Page) => void }) {
         <Card>
           <CardHeader title="Today's words" subtitle={todays.length ? `${todays.length} added` : undefined} />
           {todays.length ? (
-            <ul className="word-list">
-              {todays.map((w, n) => (
-                <li key={w.id} className="word-list__item">
-                  <span className="word-list__n">{n + 1}</span>
-                  <div className="word-list__text">
-                    <strong>{w.word}</strong>
-                    {store.lookingUp.includes(w.id) ? (
-                      <Text size="sm" tone="muted" className="looking">Finding the meaning and a picture…</Text>
-                    ) : (
-                      <Text size="sm" tone="secondary">{w.meaning || "No meaning found. Edit it in My words."}</Text>
-                    )}
-                    {w.definition && w.definition !== w.meaning && <Text size="sm" tone="muted">{w.definition}</Text>}
-                    {w.example && <Text size="sm" tone="muted" className="word-list__ex">{w.example}</Text>}
-                    {w.video && <WordMedia video={w.video} word={w.word} />}
-                  </div>
-                  {w.image && <WordMedia image={w.image} word={w.word} size="sm" />}
-                  <IconButton size="sm" icon="trash" label={`Remove ${w.word}`} onClick={() => store.removeWord(w.id)} />
-                </li>
-              ))}
-            </ul>
+            <div className="md-card__body"><WordCards words={todays.slice().reverse()} /></div>
           ) : (
             <EmptyState
               icon="edit"
