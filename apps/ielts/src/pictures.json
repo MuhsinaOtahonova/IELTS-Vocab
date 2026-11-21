@@ -9,6 +9,10 @@
   "credit": "codepo8 · BY · flickr",
   "source": "https://www.flickr.com/photos/11414938@N00/3445922712"
  },
+ "acquire": {
+  "file": "acquire.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
  "adequate": {
   "file": "adequate.jpg",
   "credit": "S nova · CC BY-SA 3.0 · Wikimedia Commons",
@@ -19,19 +23,48 @@
   "credit": "xddorox · BY · flickr",
   "source": "https://www.flickr.com/photos/26745132@N00/16312751352"
  },
+ "albeit": {
+  "file": "albeit.jpg",
+  "credit": "Gianluca Bertoncelli Photography · BY-NC-SA · flickr",
+  "source": "https://www.flickr.com/photos/34990869@N06/14348866977"
+ },
  "alleviate": {
   "file": "alleviate.jpg",
   "credit": "Radler22 · CC BY-SA 4.0 · Wikimedia Commons",
   "source": "https://commons.wikimedia.org/wiki/File:DDR,_Gesundheit,_Tabletten,_%27GERMD%27,_%27Spalt-Tabletten%27_Schmerztabletten,_CIMG7507,_orig_Knipse.jpg"
+ },
+ "allocate": {
+  "file": "allocate.jpg",
+  "credit": "Drawn with Pollinations (AI)"
  },
  "analyse": {
   "file": "analyse.jpg",
   "credit": "Chris Taylor, CSIRO · CC BY 3.0 · Wikimedia Commons",
   "source": "https://commons.wikimedia.org/wiki/File:CSIRO_ScienceImage_7845_CSIRO_scientist_Dr_Mohinudeen_Faiz_analyses_a_coal_sample_with_methaneproducing_microorganisms_under_the_microscope.jpg"
  },
+ "approximately": {
+  "file": "approximately.jpg",
+  "credit": "Troy McCullough from Washington, DC, United States · CC BY 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Soma_dispenser_-_Flickr_-_Troy_McCullough.jpg"
+ },
  "arguably": {
   "file": "arguably.jpg",
   "credit": "Drawn with Pollinations (AI)"
+ },
+ "aspect": {
+  "file": "aspect.jpg",
+  "credit": "Lars Karlsson (Keqs) · CC BY-SA 3.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Rubiks_cube_by_keqs.jpg"
+ },
+ "assess": {
+  "file": "assess.jpg",
+  "credit": "DDUGGAN12 · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Marking_papers.jpg"
+ },
+ "attribute": {
+  "file": "attribute.jpg",
+  "credit": "Cyrillic at English Wikipedia · CC BY-SA 3.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Fingerprintforcriminologystubs.jpg"
  },
  "authority": {
   "file": "authority.jpg",
@@ -88,15 +121,38 @@
   "credit": "marfis75 · BY-SA · flickr",
   "source": "https://www.flickr.com/photos/45409431@N00/12741087104"
  },
+ "consequently": {
+  "file": "consequently.jpg",
+  "credit": "Kurt:S · CC BY 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Dominoes_falling.jpg"
+ },
  "conservation": {
   "file": "conservation.jpg",
   "credit": "Koshyk · BY · flickr",
   "source": "https://www.flickr.com/photos/97235261@N00/5675818725"
  },
+ "contribute": {
+  "file": "contribute.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
  "controversial": {
   "file": "controversial.jpg",
   "credit": "Mark Ramsay from London · CC BY 2.0 · Wikimedia Commons",
   "source": "https://commons.wikimedia.org/wiki/File:Heated_Debate_(46153794902).jpg"
+ },
+ "criterion": {
+  "file": "criterion.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
+ "crucial": {
+  "file": "crucial.jpg",
+  "credit": "gdesigneralex · BY · flickr",
+  "source": "https://www.flickr.com/photos/23988760@N04/2313092112"
+ },
+ "curriculum": {
+  "file": "curriculum.jpg",
+  "credit": "spelio · BY-NC-SA · flickr",
+  "source": "https://www.flickr.com/photos/61804295@N00/51326090928"
  },
  "data": {
   "file": "data.jpg",
@@ -272,6 +328,11 @@
   "credit": "Boudoirphotographyguide · CC BY 4.0 · Wikimedia Commons",
   "source": "https://commons.wikimedia.org/wiki/File:Construction_Photography_of_Workers_on_Site_by_Construction_Photographer_Daniel_Mekis.jpg"
  },
+ "impose": {
+  "file": "impose.jpg",
+  "credit": "Deutsches Spionagemuseum Berlin, CC BY-SA 4.0 · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Geheimhaltungs-Stempel_Deutsches_Spionagemuseum_Berlin,_CC_BY-SA_4.0.jpg"
+ },
  "incentive": {
   "file": "incentive.jpg",
   "credit": "dgray_xplane · BY-ND · flickr",
@@ -286,6 +347,16 @@
   "file": "indicate.jpg",
   "credit": "Debivort at en.wikipedia · CC BY-SA 3.0 · Wikimedia Commons",
   "source": "https://commons.wikimedia.org/wiki/File:Finger-pointing-icon.png"
+ },
+ "inequality": {
+  "file": "inequality.jpg",
+  "credit": "U.S. Council of Economic Advisers - 2017 Economic Report of  · Public domain · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Income_inequality_-_share_of_income_earned_by_top_1%25_1975_to_2015.png"
+ },
+ "inevitable": {
+  "file": "inevitable.jpg",
+  "credit": "John Morgan · CC BY 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Hourglass_with_sand.jpg"
  },
  "inflation": {
   "file": "inflation.jpg",
@@ -307,6 +378,10 @@
   "credit": "Ame Otoko · BY-NC-SA · flickr",
   "source": "https://www.flickr.com/photos/30674850@N00/4334357860"
  },
+ "justify": {
+  "file": "justify.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
  "legislation": {
   "file": "legislation.jpg",
   "credit": "Diliff · CC BY-SA 3.0 · Wikimedia Commons",
@@ -327,6 +402,11 @@
   "credit": "Tony Webster · CC BY 4.0 · Wikimedia Commons",
   "source": "https://commons.wikimedia.org/wiki/File:Seat_Belt_in_Car_(55562970776).jpg"
  },
+ "marginal": {
+  "file": "marginal.jpg",
+  "credit": "Eckhard Pecher (Arcimboldo) · CC BY 2.5 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Osaka07_D5A_W400M_finish.jpg"
+ },
  "migration": {
   "file": "migration.jpg",
   "credit": "donjd2 · BY · flickr",
@@ -341,10 +421,24 @@
   "file": "moreover.jpg",
   "credit": "Drawn with Pollinations (AI)"
  },
+ "nevertheless": {
+  "file": "nevertheless.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
+ "notably": {
+  "file": "notably.jpg",
+  "credit": "AS Photography from Poland · CC BY 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Autumn_apple_harvest_(54033758032).jpg"
+ },
  "nutrition": {
   "file": "nutrition.jpg",
   "credit": "Hogan.jac · CC BY-SA 4.0 · Wikimedia Commons",
   "source": "https://commons.wikimedia.org/wiki/File:Balanced_Vegan_Dinner.png"
+ },
+ "obesity": {
+  "file": "obesity.jpg",
+  "credit": "stuant63 · BY-NC · flickr",
+  "source": "https://www.flickr.com/photos/68134711@N00/3352038164"
  },
  "obsolete": {
   "file": "obsolete.jpg",
@@ -450,6 +544,10 @@
   "credit": "chadelliott2012 · BY-SA · flickr",
   "source": "https://www.flickr.com/photos/47412815@N05/5659144073"
  },
+ "reluctant": {
+  "file": "reluctant.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
  "renewable": {
   "file": "renewable.jpg",
   "credit": "Crisco 1492 · CC BY-SA 4.0 · Wikimedia Commons",
@@ -459,6 +557,10 @@
   "file": "resource.jpg",
   "credit": "Rafael Brix · CC BY-SA 3.0 · Wikimedia Commons",
   "source": "https://commons.wikimedia.org/wiki/File:Myslivny_bozi_dar_lake.jpg"
+ },
+ "restrict": {
+  "file": "restrict.jpg",
+  "credit": "Drawn with Pollinations (AI)"
  },
  "revenue": {
   "file": "revenue.jpg",
@@ -480,10 +582,19 @@
   "credit": "somebaudy · BY-NC-ND · flickr",
   "source": "https://www.flickr.com/photos/43671133107@N01/15090461410"
  },
+ "significant": {
+  "file": "significant.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
  "steady": {
   "file": "steady.jpg",
   "credit": "Steve @ the alligator farm · BY-SA · flickr",
   "source": "https://www.flickr.com/photos/28171941@N04/3760172976"
+ },
+ "subsidy": {
+  "file": "subsidy.jpg",
+  "credit": "Michael Trolove · CC BY-SA 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Weeds_or_conservation,_Vine_Farm,_Wendy_-_geograph.org.uk_-_1356059.jpg"
  },
  "substantial": {
   "file": "substantial.jpg",
@@ -518,6 +629,11 @@
   "file": "tremendous.jpg",
   "credit": "CarProductsTested · BY-NC · flickr",
   "source": "https://www.flickr.com/photos/34630940@N06/3269788952"
+ },
+ "trend": {
+  "file": "trend.jpg",
+  "credit": "CC0 · svgsilh",
+  "source": "https://svgsilh.com/ms/ff9800/image/295648.html"
  },
  "tuition": {
   "file": "tuition.jpg",
@@ -563,5 +679,9 @@
   "file": "well-being.jpg",
   "credit": "Cohen Van der Velde · CC BY 2.0 · Wikimedia Commons",
   "source": "https://commons.wikimedia.org/wiki/File:Meditation_sitting_pose_siddhasana_yoga_Gloria.jpg"
+ },
+ "whereas": {
+  "file": "whereas.jpg",
+  "credit": "Drawn with Pollinations (AI)"
  }
 }
