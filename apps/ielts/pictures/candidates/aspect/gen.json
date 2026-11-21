@@ -4,5 +4,11 @@
   "prompt": "a simple flat illustration of a single diamond seen from three sides, each face a different colour, one side highlighted, soft colours, plain background, no text, no letters, no words",
   "seed": 7,
   "credit": "Drawn with Pollinations (AI)"
+ },
+ {
+  "file": "g2.jpg",
+  "prompt": "a simple flat illustration of a big cube with each visible side a different colour and pattern, soft colours, plain background, no text",
+  "seed": 8,
+  "credit": "Drawn with Pollinations (AI)"
  }
 ]
