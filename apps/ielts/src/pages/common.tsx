@@ -26,16 +26,17 @@ export function WordForm({ onAdded, disabledReason }: { onAdded?: () => void; di
   const [image, setImage] = useState<string | undefined>();
   const [video, setVideo] = useState("");
   const [error, setError] = useState("");
+  const [more, setMore] = useState(false);
 
-  // If the word is in the built-in list, offer its meaning and example.
+  // If the word is in the built-in list, use its English meaning and example.
   const known = ieltsWords.find((w) => w.word.toLowerCase() === word.trim().toLowerCase());
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
     if (!word.trim()) return setError("Write the word first.");
-    if (!meaning.trim()) return setError("Add a short meaning, so the games can ask about it.");
-    if (!addWord({ word, meaning, example, image, video })) return setError("This word is already in your list.");
-    toast({ tone: "success", title: `“${word.trim()}” added` });
+    const ok = addWord({ word, meaning, example: example || known?.example || "", image, video, definition: known?.meaning });
+    if (!ok) return setError("This word is already in your list.");
+    toast({ tone: "success", title: `“${word.trim()}” added`, description: meaning.trim() ? undefined : "Finding the Turkish meaning, an example and a picture…" });
     setWord("");
     setMeaning("");
     setExample("");
@@ -48,15 +49,27 @@ export function WordForm({ onAdded, disabledReason }: { onAdded?: () => void; di
 
   return (
     <form className="word-form" onSubmit={submit}>
-      <Input id="new-word" label="Word" placeholder="e.g. sustainable" value={word} autoComplete="off" onChange={(e) => (setWord(e.target.value), setError(""))} />
-      {known && !meaning && (
-        <button type="button" className="word-form__hint" onClick={() => (setMeaning(known.meaning), setExample(known.example))}>
-          Use the built-in meaning: <em>{known.meaning}</em>
+      <Input
+        id="new-word"
+        label="Word"
+        hint="Just type the word. The Turkish meaning, an example and a picture are added by themselves."
+        placeholder="e.g. sustainable"
+        value={word}
+        autoComplete="off"
+        autoCapitalize="off"
+        onChange={(e) => (setWord(e.target.value), setError(""))}
+      />
+      {more ? (
+        <>
+          <Input label="Meaning" optional placeholder="Leave empty to fill in by itself" value={meaning} onChange={(e) => setMeaning(e.target.value)} />
+          <Textarea label="Example sentence" optional rows={2} placeholder="Leave empty to fill in by itself" value={example} onChange={(e) => setExample(e.target.value)} />
+          <MediaFields word={word} image={image} onImage={setImage} video={video} onVideo={setVideo} />
+        </>
+      ) : (
+        <button type="button" className="word-form__more" onClick={() => setMore(true)}>
+          + Write my own meaning, example or picture
         </button>
       )}
-      <Input label="Meaning" placeholder="Short meaning in your own words" value={meaning} onChange={(e) => (setMeaning(e.target.value), setError(""))} />
-      <Textarea label="Example sentence" optional rows={2} placeholder="A sentence that uses the word" value={example} onChange={(e) => setExample(e.target.value)} />
-      <MediaFields word={word} image={image} onImage={setImage} video={video} onVideo={setVideo} />
       {error && <Text size="sm" tone="danger">{error}</Text>}
       <div className="word-form__actions">
         <Button type="submit" icon="plus" disabled={!!disabledReason}>Add word</Button>
@@ -88,7 +101,7 @@ export function WordListModal({ open, onClose, limit }: { open: boolean; onClose
   const add = () => {
     picked.forEach((word) => {
       const w = ieltsWords.find((x) => x.word === word);
-      if (w) addWord(w);
+      if (w) addWord({ word: w.word, meaning: "", example: w.example, definition: w.meaning });
     });
     toast({ tone: "success", title: `${picked.length} word${picked.length === 1 ? "" : "s"} added` });
     close();

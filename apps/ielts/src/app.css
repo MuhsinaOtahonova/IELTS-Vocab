@@ -297,3 +297,9 @@ html, body, #root { height: 100%; }
 }
 .app__content > * { flex-shrink: 0; }
 .profile-card .md-profile-header { border: 0; border-radius: 0; }
+
+/* Auto-filled words */
+.word-form__more { align-self: flex-start; border: 0; background: none; padding: 0; font: inherit; font-size: var(--md-text-sm); color: var(--md-color-primaryText); cursor: pointer; }
+.word-form__more:hover { text-decoration: underline; }
+.looking { font-style: italic; }
+.flash__def { font-size: var(--md-text-sm); color: var(--md-color-textSecondary); max-width: 460px; }
