@@ -1,7 +1,8 @@
 import { lookupWord } from "./lookup";
 import { createContext, createElement, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
-// Everything is saved in this browser (localStorage). No account, no server.
+// Everything is kept in this browser (localStorage). When the person signs in, the same data is
+// also saved to their account (see cloud.tsx), so it is there on every device.
 
 export interface Word {
   id: string;
@@ -60,13 +61,16 @@ export interface State {
   removed?: string[];
 }
 
-const KEY = "ielts-words.v1";
+/** Words saved before accounts existed (or with no account) live under this key. */
+export const KEY = "ielts-words.v1";
+/** Each account keeps its own copy in this browser, so two people never see each other's words. */
+export const accountKey = (uid: string) => `${KEY}.u.${uid}`;
 const THEME_KEY = "ielts-words.theme";
 const empty: State = { words: [], results: [], settings: { name: "", goal: 10 } };
 
-function load(): State {
+export function load(key = KEY): State {
   try {
-    const raw = localStorage.getItem(KEY);
+    const raw = localStorage.getItem(key);
     if (!raw) return empty;
     const s = JSON.parse(raw) as Partial<State>;
     return { words: s.words ?? [], results: s.results ?? [], settings: { ...empty.settings, ...s.settings }, removed: s.removed ?? [] };
@@ -112,9 +116,9 @@ export function mergeStates(a: State, b: Partial<State>): State {
 }
 
 /** Keeps the last copy before a big change, just in case. */
-export function snapshot(s: State) {
+export function snapshot(s: State, key = KEY) {
   try {
-    localStorage.setItem(KEY + ".before-sync", JSON.stringify(s));
+    localStorage.setItem(key + ".before-sync", JSON.stringify(s));
   } catch {
     /* ignore */
   }
@@ -228,8 +232,10 @@ interface Store extends State {
   addResult: (r: Omit<Result, "date">) => void;
   setSettings: (p: Partial<Settings>) => void;
   replaceAll: (s: unknown) => boolean;
-  /** Adds words from another copy (e.g. GitHub) without deleting anything */
+  /** Adds words from another copy (e.g. the account) without deleting anything */
   mergeIn: (remote: Partial<State>) => void;
+  /** Takes in changes made on another device (their version wins) */
+  applyRemote: (fn: (s: State) => State) => void;
   /** The whole saved state, for syncing */
   state: State;
   exportJson: () => string;
@@ -239,17 +245,17 @@ const Ctx = createContext<Store | null>(null);
 
 const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 
-export function StoreProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<State>(load);
+export function StoreProvider({ children, storageKey = KEY }: { children: ReactNode; storageKey?: string }) {
+  const [state, setState] = useState<State>(() => load(storageKey));
   const [today, setToday] = useState(dayKey);
 
   useEffect(() => {
     try {
-      localStorage.setItem(KEY, JSON.stringify(state));
+      localStorage.setItem(storageKey, JSON.stringify(state));
     } catch {
       /* storage full or blocked: keep working in memory */
     }
-  }, [state]);
+  }, [state, storageKey]);
 
   // Notice when midnight passes while the tab stays open.
   useEffect(() => {
@@ -347,6 +353,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         return true;
       },
       mergeIn: (remote) => setState((cur) => mergeStates(cur, remote)),
+      applyRemote: setState,
     }),
     [state, today, addWord, lookingUp],
   );

@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { Button, Card, CardHeader, Input, ProfileHeader, Select, Text, Textarea, useToast } from "@my-design/ui-web";
 import { activeDays, dayKey, formatDay, isLearned, parseDay, streak, useStore } from "../store";
 import { PageHeader } from "./common";
-import { GitHubSyncCard } from "./GitHubSync";
+import { AccountCard } from "./Account";
 
 const bands = ["5.0", "5.5", "6.0", "6.5", "7.0", "7.5", "8.0", "8.5", "9.0"];
 
@@ -156,7 +156,7 @@ export function ProfilePage() {
             </div>
           </Card>
 
-          <GitHubSyncCard />
+          <AccountCard />
 
           <Card>
             <CardHeader title="Backup file" />
