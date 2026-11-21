@@ -1,0 +1,30 @@
+name: Picture candidates
+on:
+  push:
+    branches: [claude/picture-candidates]
+    paths: [apps/ielts/pictures/queries.json, apps/ielts/pictures/fetch.py]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: picture-candidates
+  cancel-in-progress: false
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pillow
+      - run: python apps/ielts/pictures/fetch.py
+      - name: Save the candidates to this branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apps/ielts/pictures/candidates
+          git commit -m "Picture candidates" || exit 0
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
