@@ -1,4 +1,6 @@
 import { lookupWord } from "./lookup";
+import { isDrawn } from "./media";
+import { storedPicture } from "./pictures";
 import { createContext, createElement, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 // Everything is kept in this browser (localStorage). When the person signs in, the same data is
@@ -307,6 +309,19 @@ export function StoreProvider({ children, storageKey = KEY }: { children: ReactN
         }));
         setLookingUp((l) => l.filter((id) => id !== next.id));
       });
+  }, [state.words]);
+
+  // Checked pictures saved with the site replace automatic ones (never a picture the person chose).
+  // Old drawn pictures load live from a service with a free limit, so they are removed.
+  useEffect(() => {
+    const fix = (w: Word): Word => {
+      const pic = storedPicture(w.word);
+      if (isDrawn(w.image)) return { ...w, image: pic, ownImage: undefined };
+      if (!w.ownImage && pic && w.image !== pic) return { ...w, image: pic };
+      return w;
+    };
+    if (!state.words.some((w) => fix(w) !== w)) return;
+    setState((s) => ({ ...s, words: s.words.map(fix) }));
   }, [state.words]);
 
   const value = useMemo<Store>(
