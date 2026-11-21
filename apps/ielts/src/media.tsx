@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button, IconButton, Input, Spinner, Text } from "@my-design/ui-web";
+import { storedPicture } from "./pictures";
 
 // Pictures come from Openverse (free, openly licensed images, no API key).
 // Wikimedia Commons is the fallback when Openverse does not answer.
@@ -49,18 +50,7 @@ export async function wikiPicture(word: string, forms: string[] = [word]): Promi
   return undefined;
 }
 
-/**
- * A picture drawn for the word by a free image generator (Pollinations), used when there is no
- * real photo that fits. The address itself makes the picture, so it works for any word.
- */
-export function drawnPicture(word: string, meaning?: string): string {
-  const hint = (meaning ?? "").replace(/^\([a-z]+\)\s*/, "").split(/[;.]/)[0].slice(0, 120);
-  const prompt = `simple friendly flat illustration that shows the meaning of the English word "${word}"${hint ? `: ${hint}` : ""}. soft colours, plain background, no text, no letters`;
-  let seed = 0;
-  for (const c of word.toLowerCase()) seed = (seed * 31 + c.charCodeAt(0)) % 100000;
-  return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=384&height=384&nologo=true&seed=${seed}`;
-}
-
+/** Old drawn pictures (Pollinations) load live and hit its free limit, so they are no longer used. */
 export const isDrawn = (url?: string) => !!url && url.startsWith("https://image.pollinations.ai/");
 
 export async function searchPictures(q: string): Promise<Picture[]> {
@@ -81,7 +71,8 @@ export function youtubeId(url = ""): string | null {
 export const youtubeSearch = (word: string) => `https://www.youtube.com/results?search_query=${encodeURIComponent(`${word} meaning in English`)}`;
 
 /** Pick a picture for a word: search free photos, or paste a link. */
-export function PicturePicker({ word, meaning, value, onChange }: { word: string; meaning?: string; value?: string; onChange: (url: string | undefined) => void }) {
+export function PicturePicker({ word, value, onChange }: { word: string; meaning?: string; value?: string; onChange: (url: string | undefined) => void }) {
+  const checked = storedPicture(word);
   const [results, setResults] = useState<Picture[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -114,9 +105,11 @@ export function PicturePicker({ word, meaning, value, onChange }: { word: string
         <Button size="sm" variant="outline" icon="image" onClick={find} disabled={loading}>
           {value ? "Change picture" : "Find pictures"}
         </Button>
-        <Button size="sm" variant="ghost" icon="edit" disabled={!word.trim()} onClick={() => (onChange(drawnPicture(word.trim(), meaning)), setResults(null))}>
-          Draw one
-        </Button>
+        {checked && checked !== value && (
+          <Button size="sm" variant="ghost" icon="checkCircle" onClick={() => (onChange(checked), setResults(null))}>
+            Checked picture
+          </Button>
+        )}
         <Button size="sm" variant="ghost" icon="link" onClick={() => setPaste((p) => !p)}>
           Paste link
         </Button>

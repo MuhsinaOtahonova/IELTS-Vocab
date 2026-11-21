@@ -1,11 +1,12 @@
-import { drawnPicture, wikiPicture } from "./media";
+import { wikiPicture } from "./media";
+import { storedPicture } from "./pictures";
 
 // Fills in a word by itself, using free services that need no key and work from the browser:
 //   Turkish meaning  -> Google Translate's public web endpoint (dictionary entries, 2-3 meanings),
 //                       MyMemory translation API as fallback
 //   English meaning and example -> Free Dictionary API (dictionaryapi.dev)
 //   Picture          -> the Wikipedia article for the word, only for nouns (see media.tsx).
-//                       Otherwise (adjectives, verbs, no article) a picture is drawn for it (Pollinations).
+//                       A checked picture saved with the site (pictures.ts) always comes first.
 export interface LookupResult {
   tr?: string;
   definition?: string;
@@ -108,7 +109,7 @@ export async function lookupWord(word: string, opts: { picture?: boolean; hint?:
     tr: tr.tr,
     definition,
     example: en.status === "fulfilled" ? en.value.example : undefined,
-    // No real photo that fits (or not a noun): draw one from the word and its meaning.
-    image: opts.picture === false ? undefined : photo || drawnPicture(word, definition || opts.hint),
+    // A checked picture saved with the site comes first; otherwise the Wikipedia photo (nouns only).
+    image: opts.picture === false ? undefined : storedPicture(word) || photo,
   };
 }
