@@ -519,34 +519,89 @@
   "aspect": [
    "diamond facets",
    "cube sides"
+  ],
+  "approximately 2": [
+   "jar of jelly beans",
+   "guess how many sweets jar"
+  ],
+  "aspect 2": [
+   "rubik's cube",
+   "dice close up"
+  ],
+  "attribute 2": [
+   "fingerprint",
+   "personality traits"
+  ],
+  "consequently 2": [
+   "falling dominoes",
+   "domino effect"
+  ],
+  "crucial 2": [
+   "keystone arch",
+   "jigsaw puzzle last piece"
+  ],
+  "curriculum 2": [
+   "school timetable",
+   "class schedule board"
+  ],
+  "impose 2": [
+   "rubber stamp approved",
+   "official stamp document"
+  ],
+  "notably 2": [
+   "red apple among green apples",
+   "odd one out"
+  ],
+  "obesity 2": [
+   "bathroom scale tape measure",
+   "weighing scale feet"
+  ],
+  "trend 2": [
+   "line graph rising",
+   "stock chart upward"
+  ],
+  "marginal 2": [
+   "photo finish race",
+   "close finish sprint"
+  ],
+  "inequality 2": [
+   "income inequality",
+   "rich and poor houses"
+  ],
+  "subsidy 2": [
+   "farm subsidy tractor field",
+   "government grant farmer"
+  ],
+  "significant 2": [
+   "milestone achievement",
+   "important document signing"
+  ],
+  "albeit 2": [
+   "sunshine and rain at the same time",
+   "rainbow rain sun"
+  ],
+  "inevitable 2": [
+   "hourglass sand",
+   "sunset ocean"
+  ],
+  "justify 2": [
+   "presentation pointing whiteboard",
+   "lawyer arguing court"
+  ],
+  "assess 2": [
+   "teacher marking exam papers",
+   "exam grading"
+  ],
+  "reluctant 2": [
+   "dog refusing to walk",
+   "child refusing"
   ]
  },
  "generate": {
-  "acquire": "a simple flat illustration of a person receiving a shiny golden key into their open hands, gaining something new, soft colours, plain background, no text, no letters, no words",
-  "albeit": "a simple flat illustration of a small trophy that is slightly cracked but still shining, a win with a small problem, soft colours, plain background, no text, no letters, no words",
-  "allocate": "a simple flat illustration of a hand dividing a pie chart into coloured slices and giving each slice to a different small box, soft colours, plain background, no text, no letters, no words",
-  "approximately": "a simple flat illustration of a measuring tape next to a wavy approximate sign and a rough sketch of a jar of about 100 beans, soft colours, plain background, no text, no letters, no words",
-  "aspect": "a simple flat illustration of a single diamond seen from three sides, each face a different colour, one side highlighted, soft colours, plain background, no text, no letters, no words",
-  "assess": "a simple flat illustration of a teacher with a magnifying glass looking carefully at a paper with a checklist and a star rating, soft colours, plain background, no text, no letters, no words",
-  "attribute": "a simple flat illustration of a person with small labels pointing to them saying kind, smart and strong, shown as icons (heart, lightbulb, muscle), soft colours, plain background, no text, no letters, no words",
-  "consequently": "a simple flat illustration of a row of colourful dominoes falling one after another from left to right, cause and result, soft colours, plain background, no text, no letters, no words",
-  "contribute": "a simple flat illustration of several hands each putting one coin into a shared glass jar, soft colours, plain background, no text, no letters, no words",
-  "criterion": "a simple flat illustration of a checklist on a clipboard with three ticked boxes and a ruler beside it, standards for judging, soft colours, plain background, no text, no letters, no words",
-  "crucial": "a simple flat illustration of a single key piece holding up an arch of stone blocks, without it everything falls, soft colours, plain background, no text, no letters, no words",
-  "curriculum": "a simple flat illustration of a school timetable on a board with subject icons: book, globe, calculator, microscope, paint brush, soft colours, plain background, no text, no letters, no words",
-  "impose": "a simple flat illustration of a large official stamp pressing a red rule onto a paper, a rule forced on people, soft colours, plain background, no text, no letters, no words",
-  "inequality": "a simple flat illustration of a balance scale tipped heavily to one side with a big stack of coins on one side and one coin on the other, soft colours, plain background, no text, no letters, no words",
-  "inevitable": "a simple flat illustration of a calendar with pages flying away and a sun setting on the horizon, something that will surely happen, soft colours, plain background, no text, no letters, no words",
-  "justify": "a simple flat illustration of a person standing beside a whiteboard pointing at a list of reasons with arrows to a conclusion, soft colours, plain background, no text, no letters, no words",
-  "marginal": "a simple flat illustration of a bar chart where one tiny bar is only slightly taller than the other, a very small difference, soft colours, plain background, no text, no letters, no words",
-  "nevertheless": "a simple flat illustration of a small green plant growing strongly through a crack in grey concrete, soft colours, plain background, no text, no letters, no words",
-  "notably": "a simple flat illustration of one bright red apple standing out among many plain green apples in a neat row, soft colours, plain background, no text, no letters, no words",
-  "obesity": "a simple flat illustration of a bathroom weighing scale, a measuring tape and a burger with fries next to fresh vegetables, health topic, no people, soft colours, plain background, no text, no letters, no words",
-  "reluctant": "a simple flat illustration of a small dog sitting firmly and refusing to walk while being pulled gently on a lead, soft colours, plain background, no text, no letters, no words",
-  "restrict": "a simple flat illustration of a road with a red and white barrier and a no entry sign, access limited, soft colours, plain background, no text, no letters, no words",
-  "significant": "a simple flat illustration of a bar chart with one very tall bar marked with a big star, an important result, soft colours, plain background, no text, no letters, no words",
-  "subsidy": "a simple flat illustration of a government building handing a bag of money to a small farm with a tractor, soft colours, plain background, no text, no letters, no words",
-  "trend": "a simple flat illustration of a line chart with an arrow going steadily upward over months on a calendar, soft colours, plain background, no text, no letters, no words",
-  "whereas": "a simple flat illustration of a split picture: a hot desert with sun on the left and a snowy mountain on the right, divided by a line, soft colours, plain background, no text, no letters, no words"
+  "albeit": "a simple flat illustration of a sun shining while light rain falls from one small cloud, soft colours, plain background, no text",
+  "aspect": "a simple flat illustration of a big cube with each visible side a different colour and pattern, soft colours, plain background, no text",
+  "marginal": "a simple flat illustration of two runners crossing a finish line almost exactly together, one just a little ahead, soft colours, plain background, no text",
+  "trend": "a simple flat illustration of a big green arrow going up across a simple chart, soft colours, plain background, no text",
+  "curriculum": "a simple flat illustration of school books stacked with a globe, a calculator and a pencil on top, soft colours, plain background, no text"
  }
 }
