@@ -7,13 +7,14 @@ import { FridayPage } from "./pages/Friday";
 import { WordsPage } from "./pages/Words";
 import { ProgressPage } from "./pages/Progress";
 import { ProfilePage } from "./pages/Profile";
+import { ReadingPage } from "./pages/Reading";
 import { LoginPage } from "./pages/Login";
 import { hasAccounts } from "./firebase";
 import { AuthProvider, useAuth } from "./auth";
 import { CloudProvider, useCloud, type CloudStatus } from "./cloud";
 
-export type Page = "today" | "practice" | "friday" | "words" | "progress" | "profile";
-const pages: Page[] = ["today", "practice", "friday", "words", "progress", "profile"];
+export type Page = "today" | "practice" | "friday" | "reading" | "words" | "progress" | "profile";
+const pages: Page[] = ["today", "practice", "friday", "reading", "words", "progress", "profile"];
 
 export function App() {
   // Until Firebase is set up (see firebase.ts) the site works as before: no sign-in, saved in this browser.
@@ -114,6 +115,9 @@ function Shell() {
         <NavItem icon="zap" label="Practice" active={page === "practice"} onClick={() => go("practice")} />
         <NavItem icon="task" label={friday ? "Check day (today)" : "Friday check"} active={page === "friday"} onClick={() => go("friday")} />
       </NavSection>
+      <NavSection title="IELTS">
+        <NavItem icon="file" label="Reading" count={store.reading?.length || undefined} active={page === "reading"} onClick={() => go("reading")} />
+      </NavSection>
       <NavSection title="Me">
         <NavItem icon="list" label="My words" count={store.words.length} active={page === "words"} onClick={() => go("words")} />
         <NavItem icon="chart" label="Progress" active={page === "progress"} onClick={() => go("progress")} />
@@ -170,6 +174,7 @@ function Shell() {
           {page === "today" && <TodayPage go={go} />}
           {page === "practice" && <PracticePage go={go} />}
           {page === "friday" && <FridayPage go={go} />}
+          {page === "reading" && <ReadingPage />}
           {page === "words" && <WordsPage />}
           {page === "progress" && <ProgressPage />}
           {page === "profile" && <ProfilePage />}
@@ -182,6 +187,7 @@ function Shell() {
               { value: "today", label: "Today", icon: "home" },
               { value: "practice", label: "Practice", icon: "zap" },
               { value: "friday", label: "Friday", icon: "task", badge: friday ? 1 : undefined },
+              { value: "reading", label: "Reading", icon: "file" },
               { value: "words", label: "Words", icon: "list" },
               { value: "profile", label: "Me", icon: "user" },
             ]}

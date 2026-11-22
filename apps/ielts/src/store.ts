@@ -1,6 +1,7 @@
 import { lookupWord } from "./lookup";
 import { isDrawn } from "./media";
 import { storedPicture } from "./pictures";
+import type { Drill, ReadingTest } from "./reading";
 import { createContext, createElement, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 // Everything is kept in this browser (localStorage). When the person signs in, the same data is
@@ -61,6 +62,12 @@ export interface State {
   settings: Settings;
   /** Words deleted on purpose (lower case), so a sync does not bring them back */
   removed?: string[];
+  /** IELTS Reading practice tests (see reading.ts) */
+  reading?: ReadingTest[];
+  /** Short practice sessions on one question type */
+  drills?: Drill[];
+  /** Ids of tests and sessions deleted on purpose, so a sync does not bring them back */
+  gone?: string[];
 }
 
 /** Words saved before accounts existed (or with no account) live under this key. */
@@ -75,7 +82,7 @@ export function load(key = KEY): State {
     const raw = localStorage.getItem(key);
     if (!raw) return empty;
     const s = JSON.parse(raw) as Partial<State>;
-    return { words: s.words ?? [], results: s.results ?? [], settings: { ...empty.settings, ...s.settings }, removed: s.removed ?? [] };
+    return { words: s.words ?? [], results: s.results ?? [], settings: { ...empty.settings, ...s.settings }, removed: s.removed ?? [], reading: s.reading ?? [], drills: s.drills ?? [], gone: s.gone ?? [] };
   } catch {
     return empty;
   }
@@ -114,7 +121,20 @@ export function mergeStates(a: State, b: Partial<State>): State {
     return true;
   });
   const settings = { ...empty.settings, ...b.settings, ...Object.fromEntries(Object.entries(a.settings).filter(([, v]) => v !== undefined && v !== "")) } as Settings;
-  return { words, results, settings, removed };
+  const gone2 = Array.from(new Set([...(a.gone ?? []), ...(b.gone ?? [])]));
+  return { words, results, settings, removed, reading: byId(a.reading, b.reading, gone2), drills: byId(a.drills, b.drills, gone2), gone: gone2 };
+}
+
+/** Keeps every item from both lists once; when both have it, the one changed last wins. */
+function byId<T extends { id: string; updated?: number; date: string }>(a: T[] = [], b: T[] = [], gone: string[]): T[] {
+  const out = new Map<string, T>();
+  for (const x of [...a, ...b]) {
+    if (!x || typeof x.id !== "string") continue;
+    const old = out.get(x.id);
+    if (!old || (x.updated ?? 0) > (old.updated ?? 0)) out.set(x.id, x);
+  }
+  const g = new Set(gone);
+  return [...out.values()].filter((x) => !g.has(x.id)).sort((x, y) => (x.date < y.date ? -1 : x.date > y.date ? 1 : (x.updated ?? 0) - (y.updated ?? 0)));
 }
 
 /** Keeps the last copy before a big change, just in case. */
@@ -186,6 +206,8 @@ export function activeDays(s: State): Set<string> {
   const set = new Set<string>();
   s.words.forEach((w) => set.add(w.added));
   s.results.forEach((r) => set.add(r.date));
+  s.reading?.forEach((t) => set.add(t.date));
+  s.drills?.forEach((d) => set.add(d.date));
   return set;
 }
 
@@ -233,6 +255,11 @@ interface Store extends State {
   mark: (id: string, correct: boolean) => void;
   addResult: (r: Omit<Result, "date">) => void;
   setSettings: (p: Partial<Settings>) => void;
+  /** Adds a Reading test, or replaces the one with the same id */
+  saveTest: (t: ReadingTest) => void;
+  saveDrill: (d: Drill) => void;
+  /** Deletes a Reading test or practice session */
+  removeReading: (id: string) => void;
   replaceAll: (s: unknown) => boolean;
   /** Adds words from another copy (e.g. the account) without deleting anything */
   mergeIn: (remote: Partial<State>) => void;
@@ -245,7 +272,10 @@ interface Store extends State {
 
 const Ctx = createContext<Store | null>(null);
 
-const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+/** Drops empty fields: the account database does not accept "undefined". */
+const clean = <T,>(x: T): T => JSON.parse(JSON.stringify(x));
+
+export const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 
 export function StoreProvider({ children, storageKey = KEY }: { children: ReactNode; storageKey?: string }) {
   const [state, setState] = useState<State>(() => load(storageKey));
@@ -358,6 +388,9 @@ export function StoreProvider({ children, storageKey = KEY }: { children: ReactN
         setState((s) => ({ ...s, words: s.words.map((w) => (w.id === id ? { ...w, right: w.right + (correct ? 1 : 0), wrong: w.wrong + (correct ? 0 : 1) } : w)) })),
       addResult: (r) => setState((s) => ({ ...s, results: [...s.results, { ...r, date: dayKey() }] })),
       setSettings: (p) => setState((s) => ({ ...s, settings: { ...s.settings, ...p } })),
+      saveTest: (t) => setState((s) => mergeStates(s, { reading: [clean({ ...t, updated: Date.now() })] })),
+      saveDrill: (d) => setState((s) => mergeStates(s, { drills: [clean({ ...d, updated: Date.now() })] })),
+      removeReading: (id) => setState((s) => mergeStates(s, { gone: [id] })),
       exportJson: () => JSON.stringify(state, null, 2),
       replaceAll: (raw) => {
         const s = raw as Partial<State> | null;

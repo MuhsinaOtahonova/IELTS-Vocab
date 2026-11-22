@@ -38,7 +38,14 @@ function stable(v: unknown): string {
   );
 }
 
-const metaOf = (s: Partial<State>) => ({ settings: s.settings ?? {}, results: s.results ?? [], removed: s.removed ?? [] });
+const metaOf = (s: Partial<State>) => ({
+  settings: s.settings ?? {},
+  results: s.results ?? [],
+  removed: s.removed ?? [],
+  reading: s.reading ?? [],
+  drills: s.drills ?? [],
+  gone: s.gone ?? [],
+});
 
 const ADDED_TO = `${KEY}.added-to`;
 const skipKey = (uid: string) => `${KEY}.skip.${uid}`;
@@ -202,8 +209,10 @@ export function CloudProvider({ user, storageKey, children }: { user: User; stor
       const j = stable(m);
       if (j === synced.current.meta) return;
       synced.current.meta = j;
-      // The other device's profile wins; results and deleted words are combined.
-      applyRemote((s) => mergeStates({ ...s, settings: { ...s.settings, ...(m.settings as State["settings"]) } }, { results: m.results, removed: m.removed }));
+      // The other device's profile wins; results, deleted words and Reading tests are combined.
+      applyRemote((s) =>
+        mergeStates({ ...s, settings: { ...s.settings, ...(m.settings as State["settings"]) } }, { results: m.results, removed: m.removed, reading: m.reading, drills: m.drills, gone: m.gone }),
+      );
     });
     return () => {
       stopWords();
@@ -215,7 +224,7 @@ export function CloudProvider({ user, storageKey, children }: { user: User; stor
     if (!guest) return;
     snapshot(stateRef.current, storageKey);
     // Only words and results: the profile already belongs to this account.
-    applyRemote((s) => mergeStates(s, { words: guest.words, results: guest.results, removed: guest.removed }));
+    applyRemote((s) => mergeStates(s, { words: guest.words, results: guest.results, removed: guest.removed, reading: guest.reading, drills: guest.drills, gone: guest.gone }));
     try {
       localStorage.setItem(ADDED_TO, user.uid); // the copy itself stays in this browser, untouched
     } catch {
