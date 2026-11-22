@@ -1,1 +1,687 @@
-{}
+{
+ "academic": {
+  "file": "academic.jpg",
+  "credit": "teddy-rised · BY-NC-ND · flickr",
+  "source": "https://www.flickr.com/photos/44742295@N00/2814710002"
+ },
+ "access": {
+  "file": "access.jpg",
+  "credit": "codepo8 · BY · flickr",
+  "source": "https://www.flickr.com/photos/11414938@N00/3445922712"
+ },
+ "acquire": {
+  "file": "acquire.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
+ "adequate": {
+  "file": "adequate.jpg",
+  "credit": "S nova · CC BY-SA 3.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Glass_Half_Full_bw_1.JPG"
+ },
+ "advocate": {
+  "file": "advocate.jpg",
+  "credit": "xddorox · BY · flickr",
+  "source": "https://www.flickr.com/photos/26745132@N00/16312751352"
+ },
+ "albeit": {
+  "file": "albeit.jpg",
+  "credit": "Gianluca Bertoncelli Photography · BY-NC-SA · flickr",
+  "source": "https://www.flickr.com/photos/34990869@N06/14348866977"
+ },
+ "alleviate": {
+  "file": "alleviate.jpg",
+  "credit": "Radler22 · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:DDR,_Gesundheit,_Tabletten,_%27GERMD%27,_%27Spalt-Tabletten%27_Schmerztabletten,_CIMG7507,_orig_Knipse.jpg"
+ },
+ "allocate": {
+  "file": "allocate.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
+ "analyse": {
+  "file": "analyse.jpg",
+  "credit": "Chris Taylor, CSIRO · CC BY 3.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:CSIRO_ScienceImage_7845_CSIRO_scientist_Dr_Mohinudeen_Faiz_analyses_a_coal_sample_with_methaneproducing_microorganisms_under_the_microscope.jpg"
+ },
+ "approximately": {
+  "file": "approximately.jpg",
+  "credit": "Troy McCullough from Washington, DC, United States · CC BY 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Soma_dispenser_-_Flickr_-_Troy_McCullough.jpg"
+ },
+ "arguably": {
+  "file": "arguably.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
+ "aspect": {
+  "file": "aspect.jpg",
+  "credit": "Lars Karlsson (Keqs) · CC BY-SA 3.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Rubiks_cube_by_keqs.jpg"
+ },
+ "assess": {
+  "file": "assess.jpg",
+  "credit": "DDUGGAN12 · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Marking_papers.jpg"
+ },
+ "attribute": {
+  "file": "attribute.jpg",
+  "credit": "Cyrillic at English Wikipedia · CC BY-SA 3.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Fingerprintforcriminologystubs.jpg"
+ },
+ "authority": {
+  "file": "authority.jpg",
+  "credit": "weiss_paarz_photos · BY-SA · flickr",
+  "source": "https://www.flickr.com/photos/141290938@N03/26682691294"
+ },
+ "automation": {
+  "file": "automation.jpg",
+  "credit": "jurvetson · BY · flickr",
+  "source": "https://www.flickr.com/photos/44124348109@N01/7408451314"
+ },
+ "beneficial": {
+  "file": "beneficial.jpg",
+  "credit": "John Severns (Severnjc) · Public domain · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:European_honey_bee_extracts_nectar.jpg"
+ },
+ "biodiversity": {
+  "file": "biodiversity.jpg",
+  "credit": "adriansalamandre · BY-NC-ND · flickr",
+  "source": "https://www.flickr.com/photos/8957789@N07/5071072923"
+ },
+ "breakthrough": {
+  "file": "breakthrough.jpg",
+  "credit": "IITA Image Library · BY-NC · flickr",
+  "source": "https://www.flickr.com/photos/45796762@N03/4923066809"
+ },
+ "chronic": {
+  "file": "chronic.jpg",
+  "credit": "madartzgraphics · CC0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Dolor_espalda.png"
+ },
+ "community": {
+  "file": "community.jpg",
+  "credit": "Mark Myles Mugambi · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Maasai_women_walking_together_during_community_gathering_in_Kajiado_County.jpg"
+ },
+ "commute": {
+  "file": "commute.jpg",
+  "credit": "Leslie Mateus · CC BY-SA 2.5 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Yonge_Stn_Rush_Hour_1.JPG"
+ },
+ "comprehend": {
+  "file": "comprehend.jpg",
+  "credit": "Blue Plover · CC BY-SA 3.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Kit_with_children_-_Big_Brother_Mouse.JPG"
+ },
+ "comprehensive": {
+  "file": "comprehensive.jpg",
+  "credit": "Henning Makholm · Public domain · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:StoreDanskeEncyklopaedi.jpg"
+ },
+ "consequence": {
+  "file": "consequence.jpg",
+  "credit": "marfis75 · BY-SA · flickr",
+  "source": "https://www.flickr.com/photos/45409431@N00/12741087104"
+ },
+ "consequently": {
+  "file": "consequently.jpg",
+  "credit": "Kurt:S · CC BY 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Dominoes_falling.jpg"
+ },
+ "conservation": {
+  "file": "conservation.jpg",
+  "credit": "Koshyk · BY · flickr",
+  "source": "https://www.flickr.com/photos/97235261@N00/5675818725"
+ },
+ "contribute": {
+  "file": "contribute.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
+ "controversial": {
+  "file": "controversial.jpg",
+  "credit": "Mark Ramsay from London · CC BY 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Heated_Debate_(46153794902).jpg"
+ },
+ "criterion": {
+  "file": "criterion.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
+ "crucial": {
+  "file": "crucial.jpg",
+  "credit": "gdesigneralex · BY · flickr",
+  "source": "https://www.flickr.com/photos/23988760@N04/2313092112"
+ },
+ "curriculum": {
+  "file": "curriculum.jpg",
+  "credit": "spelio · BY-NC-SA · flickr",
+  "source": "https://www.flickr.com/photos/61804295@N00/51326090928"
+ },
+ "data": {
+  "file": "data.jpg",
+  "credit": "Christopher Bowns · CC BY-SA 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Virginia_Tech_-_data_center.jpg"
+ },
+ "decline": {
+  "file": "decline.jpg",
+  "credit": "Altered Reality · CC0 · stocksnap",
+  "source": "https://stocksnap.io/photo/stock-market-BI0OXVDDLY"
+ },
+ "deforestation": {
+  "file": "deforestation.jpg",
+  "credit": "Andy Waddington · CC BY-SA 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Clear_cut_at_the_top_of_the_Stang_Forest_-_geograph.org.uk_-_1583828.jpg"
+ },
+ "demographic": {
+  "file": "demographic.jpg",
+  "credit": "Bassem Fleifel · Public domain · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Syria_single_age_population_pyramid_2020-ar.png"
+ },
+ "demonstrate": {
+  "file": "demonstrate.jpg",
+  "credit": "COD Newsroom · CC BY 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Food_chemistry_(43803529850).jpg"
+ },
+ "deplete": {
+  "file": "deplete.jpg",
+  "credit": "Sean MacEntee · BY · flickr",
+  "source": "https://www.flickr.com/photos/18090920@N07/5683686224"
+ },
+ "derive": {
+  "file": "derive.jpg",
+  "credit": "LadyDragonflyCC - >;< · BY · flickr",
+  "source": "https://www.flickr.com/photos/19646481@N06/8549560048"
+ },
+ "detrimental": {
+  "file": "detrimental.jpg",
+  "credit": "Let Ideas Compete · BY-NC-ND · flickr",
+  "source": "https://www.flickr.com/photos/7200789@N06/1591106264"
+ },
+ "device": {
+  "file": "device.jpg",
+  "credit": "嘉傑 · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Samsung_Galaxy_Note_10_(Wiki).jpg"
+ },
+ "digital": {
+  "file": "digital.jpg",
+  "credit": "Creativity103 · BY · flickr",
+  "source": "https://www.flickr.com/photos/36894712@N04/5227842611"
+ },
+ "dilemma": {
+  "file": "dilemma.jpg",
+  "credit": "Brian Ironside · CC BY-SA 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Fork_in_the_road_-_geograph.org.uk_-_318628.jpg"
+ },
+ "discipline": {
+  "file": "discipline.jpg",
+  "credit": "In Memoriam: PhillipC · BY · flickr",
+  "source": "https://www.flickr.com/photos/42033648@N00/437353411"
+ },
+ "discrimination": {
+  "file": "discrimination.jpg",
+  "credit": "jimforest · BY-NC-ND · flickr",
+  "source": "https://www.flickr.com/photos/78953420@N00/49268796022"
+ },
+ "diverse": {
+  "file": "diverse.jpg",
+  "credit": "Bert Kaufmann · BY · flickr",
+  "source": "https://www.flickr.com/photos/22746515@N02/3391269337"
+ },
+ "diversity": {
+  "file": "diversity.jpg",
+  "credit": "user Wonder woman0731 · CC BY 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Racially_diverse_unity.jpg"
+ },
+ "drawback": {
+  "file": "drawback.jpg",
+  "credit": "Xwizard35 · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Flat_tire_on_a_Fiat_Panda.jpg"
+ },
+ "drought": {
+  "file": "drought.jpg",
+  "credit": "CIAT International Center for Tropical Agriculture · BY-SA · flickr",
+  "source": "https://www.flickr.com/photos/38476503@N08/4459581071"
+ },
+ "emission": {
+  "file": "emission.jpg",
+  "credit": "why 137 · BY · flickr",
+  "source": "https://www.flickr.com/photos/78752351@N03/8464430910"
+ },
+ "emphasise": {
+  "file": "emphasise.jpg",
+  "credit": "Guido \"random\" Alvarez · CC BY 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Highlighter_pen_-photocopied_text-9Mar2009.jpg"
+ },
+ "employment": {
+  "file": "employment.jpg",
+  "credit": "Alan Cleaver · BY · flickr",
+  "source": "https://www.flickr.com/photos/11121568@N06/4320245924"
+ },
+ "enforce": {
+  "file": "enforce.jpg",
+  "credit": "CEphoto, Uwe Aranas · CC BY-SA 3.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Kuala_Lumpur_Malaysia_Traffic-police-03.jpg"
+ },
+ "entrepreneur": {
+  "file": "entrepreneur.jpg",
+  "credit": "The White House · Public domain · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Kamala_Harris_with_small_business_owners_-_2024.jpg"
+ },
+ "epidemic": {
+  "file": "epidemic.jpg",
+  "credit": "otisarchives4 · BY · flickr",
+  "source": "https://www.flickr.com/photos/27337026@N03/3202015761"
+ },
+ "essential": {
+  "file": "essential.jpg",
+  "credit": "WikiGrower1 · CC BY 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Water_bottle_11-26-2025.jpg"
+ },
+ "exacerbate": {
+  "file": "exacerbate.jpg",
+  "credit": "U.S. Forest Service- Pacific Northwest Region · Public domain · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Lick_Fire_on_the_Umatilla_National_Forest_burning_at_night.jpg"
+ },
+ "facilitate": {
+  "file": "facilitate.jpg",
+  "credit": "MB-one · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Dancer_bus,_Busworld_Europe_2023,_Brussels_(P1140246).jpg"
+ },
+ "feasible": {
+  "file": "feasible.jpg",
+  "credit": "World Bank Photo Collection · BY-NC-ND · flickr",
+  "source": "https://www.flickr.com/photos/10816734@N03/7205697304"
+ },
+ "fluctuate": {
+  "file": "fluctuate.jpg",
+  "credit": "Public domain · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Austrian_stock_market_index.jpg"
+ },
+ "funding": {
+  "file": "funding.jpg",
+  "credit": "Cheshire East Council · BY-NC-ND · flickr",
+  "source": "https://www.flickr.com/photos/90244737@N06/14780793797"
+ },
+ "furthermore": {
+  "file": "furthermore.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
+ "generation": {
+  "file": "generation.jpg",
+  "credit": "Unknown authorUnknown author · Public domain · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Anne_Lindbergh_and_son_Charles_Jr,_mother,_and_grandmother_cph.3b19303u.jpg"
+ },
+ "habitat": {
+  "file": "habitat.jpg",
+  "credit": "Petro Stelte · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Bird-Nest-Chicks-Sitia--Crete-Greece.jpg"
+ },
+ "hinder": {
+  "file": "hinder.jpg",
+  "credit": "Andrew Kalat · BY-ND · flickr",
+  "source": "https://www.flickr.com/photos/90811165@N00/3438495458"
+ },
+ "hypothesis": {
+  "file": "hypothesis.jpg",
+  "credit": "sea turtle · BY-NC-ND · flickr",
+  "source": "https://www.flickr.com/photos/33392350@N00/4177301701"
+ },
+ "implement": {
+  "file": "implement.jpg",
+  "credit": "Boudoirphotographyguide · CC BY 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Construction_Photography_of_Workers_on_Site_by_Construction_Photographer_Daniel_Mekis.jpg"
+ },
+ "impose": {
+  "file": "impose.jpg",
+  "credit": "Deutsches Spionagemuseum Berlin, CC BY-SA 4.0 · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Geheimhaltungs-Stempel_Deutsches_Spionagemuseum_Berlin,_CC_BY-SA_4.0.jpg"
+ },
+ "incentive": {
+  "file": "incentive.jpg",
+  "credit": "dgray_xplane · BY-ND · flickr",
+  "source": "https://www.flickr.com/photos/38075047@N00/6416285269"
+ },
+ "income": {
+  "file": "income.jpg",
+  "credit": "401(K) 2013 · BY-SA · flickr",
+  "source": "https://www.flickr.com/photos/68751915@N05/6722562405"
+ },
+ "indicate": {
+  "file": "indicate.jpg",
+  "credit": "Debivort at en.wikipedia · CC BY-SA 3.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Finger-pointing-icon.png"
+ },
+ "inequality": {
+  "file": "inequality.jpg",
+  "credit": "U.S. Council of Economic Advisers - 2017 Economic Report of  · Public domain · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Income_inequality_-_share_of_income_earned_by_top_1%25_1975_to_2015.png"
+ },
+ "inevitable": {
+  "file": "inevitable.jpg",
+  "credit": "John Morgan · CC BY 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Hourglass_with_sand.jpg"
+ },
+ "inflation": {
+  "file": "inflation.jpg",
+  "credit": "Peat Bakke · BY · flickr",
+  "source": "https://www.flickr.com/photos/20417698@N00/2899197879"
+ },
+ "infrastructure": {
+  "file": "infrastructure.jpg",
+  "credit": "Mat Fascione · CC BY-SA 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:M6_Motorway_Bridge_at_Perry_Barr_-_geograph.org.uk_-_5730090.jpg"
+ },
+ "innovation": {
+  "file": "innovation.jpg",
+  "credit": "Adoscam · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Imprimante_3D.jpg"
+ },
+ "interact": {
+  "file": "interact.jpg",
+  "credit": "Ame Otoko · BY-NC-SA · flickr",
+  "source": "https://www.flickr.com/photos/30674850@N00/4334357860"
+ },
+ "justify": {
+  "file": "justify.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
+ "legislation": {
+  "file": "legislation.jpg",
+  "credit": "Diliff · CC BY-SA 3.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:European_Parliament_Strasbourg_Hemicycle_-_Diliff.jpg"
+ },
+ "life expectancy": {
+  "file": "life-expectancy.jpg",
+  "credit": "alistairas · BY-NC · flickr",
+  "source": "https://www.flickr.com/photos/45981223@N00/394063700"
+ },
+ "literacy": {
+  "file": "literacy.jpg",
+  "credit": "National Institutes of Health (NIH) · PDM · flickr",
+  "source": "https://www.flickr.com/photos/132318516@N08/48997124487"
+ },
+ "mandatory": {
+  "file": "mandatory.jpg",
+  "credit": "Tony Webster · CC BY 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Seat_Belt_in_Car_(55562970776).jpg"
+ },
+ "marginal": {
+  "file": "marginal.jpg",
+  "credit": "Eckhard Pecher (Arcimboldo) · CC BY 2.5 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Osaka07_D5A_W400M_finish.jpg"
+ },
+ "migration": {
+  "file": "migration.jpg",
+  "credit": "donjd2 · BY · flickr",
+  "source": "https://www.flickr.com/photos/28156071@N00/10645979194"
+ },
+ "mitigate": {
+  "file": "mitigate.jpg",
+  "credit": "Defence Images · BY-NC · flickr",
+  "source": "https://www.flickr.com/photos/48399297@N04/13761979915"
+ },
+ "moreover": {
+  "file": "moreover.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
+ "nevertheless": {
+  "file": "nevertheless.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
+ "notably": {
+  "file": "notably.jpg",
+  "credit": "AS Photography from Poland · CC BY 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Autumn_apple_harvest_(54033758032).jpg"
+ },
+ "nutrition": {
+  "file": "nutrition.jpg",
+  "credit": "Hogan.jac · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Balanced_Vegan_Dinner.png"
+ },
+ "obesity": {
+  "file": "obesity.jpg",
+  "credit": "stuant63 · BY-NC · flickr",
+  "source": "https://www.flickr.com/photos/68134711@N00/3352038164"
+ },
+ "obsolete": {
+  "file": "obsolete.jpg",
+  "credit": "Shixart1985 · CC BY 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:A_man_adjusting_an_old_typewriter_closeup.jpg"
+ },
+ "obstacle": {
+  "file": "obstacle.jpg",
+  "credit": "Erik van Leeuwen, attribution: Erik van Leeuwen (bron: Wikip · GFDL · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Men%27s_60_metres_hurdles_Portland_2016.jpg"
+ },
+ "outcome": {
+  "file": "outcome.jpg",
+  "credit": "Sport the library · CC BY-SA 3.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:301000_-_Athletics_track_Lisa_McIntosh_finish_line_-_3b_-_2000_Sydney_race_photo.jpg"
+ },
+ "peak": {
+  "file": "peak.jpg",
+  "credit": "Vyacheslav Argenberg · CC BY 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Cholatse_Peak,_Nepal,_Himalayas.jpg"
+ },
+ "penalty": {
+  "file": "penalty.jpg",
+  "credit": "ThorRune · Public domain · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Parking_ticket.JPG"
+ },
+ "perceive": {
+  "file": "perceive.jpg",
+  "credit": "Sabrina Campagna Live Music Photographer · BY-NC-ND · flickr",
+  "source": "https://www.flickr.com/photos/8314403@N03/8984931391"
+ },
+ "perspective": {
+  "file": "perspective.jpg",
+  "credit": "TheFriendlyFiend · BY-SA · flickr",
+  "source": "https://www.flickr.com/photos/98063470@N00/326044514"
+ },
+ "phenomenon": {
+  "file": "phenomenon.jpg",
+  "credit": "United States Air Force photo by Senior Airman Joshua Strang · Public domain · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Aurora_borealis_over_Eielson_Air_Force_Base,_Alaska.jpg"
+ },
+ "plummet": {
+  "file": "plummet.jpg",
+  "credit": "Renerpho · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:DowJones2020crash.png"
+ },
+ "policy": {
+  "file": "policy.jpg",
+  "credit": "제주특별자치도청 경제일자리과 · KOGL Type 1 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:2025_Jeju-do_Economic_Policy_Council_1st_Meeting_20250108_(05).jpg"
+ },
+ "pollutant": {
+  "file": "pollutant.jpg",
+  "credit": "Horia Varlan · BY · flickr",
+  "source": "https://www.flickr.com/photos/10361931@N06/4290848934"
+ },
+ "predominantly": {
+  "file": "predominantly.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
+ "prevalent": {
+  "file": "prevalent.jpg",
+  "credit": "PattayaPatrol · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:DSC_6225_Crowd_capturing_the_night_sky_with_smartphones_lights_and_bokeh_glowing_in_the_background.jpg"
+ },
+ "prevention": {
+  "file": "prevention.jpg",
+  "credit": "info.inantrangia · BY · flickr",
+  "source": "https://www.flickr.com/photos/193437255@N06/51320254030"
+ },
+ "prioritise": {
+  "file": "prioritise.jpg",
+  "credit": "https://pixabay.com/users/moteoo-466065/ · CC0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Questionnaire-checklist.png"
+ },
+ "priority": {
+  "file": "priority.jpg",
+  "credit": "Tomás Del Coro · CC BY-SA 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:American_Emergency_Ambulance_at_a_car_show_in_Puerto_Rico_in_2013.jpg"
+ },
+ "productivity": {
+  "file": "productivity.jpg",
+  "credit": "jamesjyu · BY-NC-SA · flickr",
+  "source": "https://www.flickr.com/photos/32593095@N00/13042995"
+ },
+ "profound": {
+  "file": "profound.jpg",
+  "credit": "NOAA Office of Ocean Exploration and Research · Public domain · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:ROV_Deep_Discoverer_climbs_Guayanilla_Canyon_April_2015.png"
+ },
+ "proportion": {
+  "file": "proportion.jpg",
+  "credit": "Sylvanmoon · CC0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Pie-chart.jpg"
+ },
+ "recruit": {
+  "file": "recruit.jpg",
+  "credit": "amtec_photos · CC BY-SA 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Woman_on_a_Job_Interview_-_38826218972.jpg"
+ },
+ "regulate": {
+  "file": "regulate.jpg",
+  "credit": "chadelliott2012 · BY-SA · flickr",
+  "source": "https://www.flickr.com/photos/47412815@N05/5659144073"
+ },
+ "reluctant": {
+  "file": "reluctant.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
+ "renewable": {
+  "file": "renewable.jpg",
+  "credit": "Crisco 1492 · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Wind_turbines_along_North_Middle_Road,_Essex_County,_Ontario,_2025-06-29.jpg"
+ },
+ "resource": {
+  "file": "resource.jpg",
+  "credit": "Rafael Brix · CC BY-SA 3.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Myslivny_bozi_dar_lake.jpg"
+ },
+ "restrict": {
+  "file": "restrict.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
+ "revenue": {
+  "file": "revenue.jpg",
+  "credit": "Avij (talk · contribs) · Public domain · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Euro_coins_and_banknotes_(cropped).jpg"
+ },
+ "scenario": {
+  "file": "scenario.jpg",
+  "credit": "Ryzom · CC BY-SA 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Ryzom_storyboard_1.jpg"
+ },
+ "sector": {
+  "file": "sector.jpg",
+  "credit": "Michel Bakni · Public domain · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Bad_pie_chart_design.png"
+ },
+ "sedentary": {
+  "file": "sedentary.jpg",
+  "credit": "somebaudy · BY-NC-ND · flickr",
+  "source": "https://www.flickr.com/photos/43671133107@N01/15090461410"
+ },
+ "significant": {
+  "file": "significant.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
+ "steady": {
+  "file": "steady.jpg",
+  "credit": "Steve @ the alligator farm · BY-SA · flickr",
+  "source": "https://www.flickr.com/photos/28171941@N04/3760172976"
+ },
+ "subsidy": {
+  "file": "subsidy.jpg",
+  "credit": "Michael Trolove · CC BY-SA 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Weeds_or_conservation,_Vine_Farm,_Wendy_-_geograph.org.uk_-_1356059.jpg"
+ },
+ "substantial": {
+  "file": "substantial.jpg",
+  "credit": "Images_of_Money · BY · flickr",
+  "source": "https://www.flickr.com/photos/59937401@N07/5856649637"
+ },
+ "surge": {
+  "file": "surge.jpg",
+  "credit": "Scott Pena from Galveston TX, U.S.A. · CC BY 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Storm_Surge,_200_miles_away_(2951065260).jpg"
+ },
+ "sustainable": {
+  "file": "sustainable.jpg",
+  "credit": "Suhasajgaonkar · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Sustainable_agriculture.jpg"
+ },
+ "therapy": {
+  "file": "therapy.jpg",
+  "credit": "Sumaia Villela/Agência Brasil · CC BY 3.0 br · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Beb%C3%AA_com_microcefalia_01.jpg"
+ },
+ "therefore": {
+  "file": "therefore.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ },
+ "tradition": {
+  "file": "tradition.jpg",
+  "credit": "Unknown authorUnknown author · CC BY 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Iwate_Kitakami_Michinoku_Performing_Arts_Festival_s.jpg"
+ },
+ "tremendous": {
+  "file": "tremendous.jpg",
+  "credit": "CarProductsTested · BY-NC · flickr",
+  "source": "https://www.flickr.com/photos/34630940@N06/3269788952"
+ },
+ "trend": {
+  "file": "trend.jpg",
+  "credit": "CC0 · svgsilh",
+  "source": "https://svgsilh.com/ms/ff9800/image/295648.html"
+ },
+ "tuition": {
+  "file": "tuition.jpg",
+  "credit": "thisisedinburgh · BY · flickr",
+  "source": "https://www.flickr.com/photos/126452848@N08/21574145036"
+ },
+ "undergraduate": {
+  "file": "undergraduate.jpg",
+  "credit": "Sydney Uni · BY-NC-SA · flickr",
+  "source": "https://www.flickr.com/photos/8264482@N08/6953908263"
+ },
+ "undermine": {
+  "file": "undermine.jpg",
+  "credit": "Chris D 2006 · BY-NC-ND · flickr",
+  "source": "https://www.flickr.com/photos/77266473@N00/6919933646"
+ },
+ "urbanisation": {
+  "file": "urbanisation.jpg",
+  "credit": "seaview99 · BY-NC-SA · flickr",
+  "source": "https://www.flickr.com/photos/85296574@N00/3841932486"
+ },
+ "virtual": {
+  "file": "virtual.jpg",
+  "credit": "Matthew Henry · CC0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Beard-eyewear-htc-vive-373905.jpg"
+ },
+ "vocational": {
+  "file": "vocational.jpg",
+  "credit": "Julien Harneis · BY-SA · flickr",
+  "source": "https://www.flickr.com/photos/16935515@N00/529284346"
+ },
+ "vulnerable": {
+  "file": "vulnerable.jpg",
+  "credit": "born1945 · BY · flickr",
+  "source": "https://www.flickr.com/photos/12567713@N00/174904327"
+ },
+ "welfare": {
+  "file": "welfare.jpg",
+  "credit": "United States Senate - The Office of Mazie Hirono · Public domain · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Mazie_Hirono_with_Hawaii_Food_Bank_volunteers.jpg"
+ },
+ "well-being": {
+  "file": "well-being.jpg",
+  "credit": "Cohen Van der Velde · CC BY 2.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Meditation_sitting_pose_siddhasana_yoga_Gloria.jpg"
+ },
+ "whereas": {
+  "file": "whereas.jpg",
+  "credit": "Drawn with Pollinations (AI)"
+ }
+}
