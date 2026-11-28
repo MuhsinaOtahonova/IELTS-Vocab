@@ -227,18 +227,40 @@ function Result(){const c=S.ans.filter((a,i)=>a===right(i)).length,sc=S.score;
    ${wrong?`<div class="meta">Tekrarda düzeltilen: <b>${fixed}</b> / ${wrong}</div>`:""}
   </div>
   <div class="skills">${Object.keys(SK).map(s=>`<div class="sk c-${s}">${SK[s][0]} ${SK[s][1]}<b>${by[s][0]}/${by[s][1]}</b></div>`).join("")}</div>
+  <div class="card send" style="margin-top:18px">
+   <b>📤 Sonucunu öğretmenine gönder</b>
+   <div class="meta">Düğmeye bas, WhatsApp veya Telegram’ı seç ve öğretmenine gönder.</div>
+   <button class="btn" id="send" style="margin-top:10px;background:var(--sun);box-shadow:0 4px 0 #B07A1C">Öğretmenime gönder 📤</button>
+   <div id="sendmsg" class="meta" style="margin-top:8px"></div>
+   <textarea id="sendtxt" readonly hidden style="width:100%;min-height:160px;margin-top:8px;border-radius:12px;border:2px solid var(--line);padding:10px;font:14px/1.4 var(--body)"></textarea>
+  </div>
   <div class="row" style="margin-top:18px">
    <button class="btn" id="rv">Cevaplarıma bak 🔍</button>
    ${wrong>fixed?`<button class="btn lav" id="rt">Yanlışlarımı tekrar çöz 🔁</button>`:""}
   </div>
   <div class="row" style="margin-top:22px"><button class="btn ghost" id="reset">Testi baştan başlat</button></div>
   <div id="sure" class="card" hidden style="margin-top:12px"><b>Emin misin?</b> <span class="meta">Puanın ve cevapların silinecek.</span><div class="row" style="margin-top:10px"><button class="btn" id="yes" style="background:var(--bad);box-shadow:0 4px 0 #9B342C">Evet, sil</button><button class="btn ghost" id="no">Vazgeç</button></div></div>`;
+  document.getElementById("send").onclick=sendResult;
   document.getElementById("rv").onclick=()=>{S.screen="review";save();render();};
   const rt=document.getElementById("rt");if(rt)rt.onclick=()=>startRetry();
   document.getElementById("reset").onclick=()=>{document.getElementById("sure").hidden=false;};
   document.getElementById("no").onclick=()=>{document.getElementById("sure").hidden=true;};
   document.getElementById("yes").onclick=()=>{const n=S.name;S=fresh();S.name=n;save();render();};
 }
+
+function summary(){const c=S.ans.filter((a,i)=>a===right(i)).length;
+  const by={};Q.forEach((q,i)=>{by[q.s]=by[q.s]||[0,0];by[q.s][1]++;if(S.ans[i]===right(i))by[q.s][0]++;});
+  const wrong=Q.length-c,fixed=Object.values(S.retry).filter(r=>r.ok).length;
+  let t=`📝 Türkçe A2 Testi (1–5. üniteler)\n👧 ${S.name||"(isim yazılmadı)"}\n📅 ${S.date||""}\n⭐ Puan: ${S.score}/100 (${c} doğru, ${wrong} yanlış, ilk deneme)\n`;
+  t+=Object.keys(SK).map(s=>`${SK[s][1]} ${by[s][0]}/${by[s][1]}`).join(" · ")+"\n";
+  if(wrong)t+=`🔁 Tekrarda kendi düzeltti: ${fixed}/${wrong}\n`;
+  t+="\nSoru: seçtiği şık\n";
+  t+=Q.map((q,i)=>{const ok=S.ans[i]===right(i),r=S.retry[i];return `${i+1}. ${LET[S.ans[i]]} ${ok?"✅":r&&r.ok?"❌→✅":"❌"}`;}).join("\n");
+  return t;}
+async function sendResult(){const t=summary(),m=document.getElementById("sendmsg"),ta=document.getElementById("sendtxt");
+  try{if(navigator.share){await navigator.share({title:"Türkçe A2 Testi sonucu",text:t});m.textContent="Gönderildi! 👍";return;}}catch(e){if(e&&e.name==="AbortError"){m.textContent="Gönderilmedi. İstersen tekrar dene.";return;}}
+  try{await navigator.clipboard.writeText(t);m.textContent="Sonuç kopyalandı. WhatsApp’ta öğretmenine yapıştırıp gönder.";return;}catch(e){}
+  ta.hidden=false;ta.value=t;ta.focus();ta.select();m.textContent="Bu yazıyı kopyalayıp öğretmenine gönder.";}
 
 function Review(){
   app.innerHTML=`<div class="top"><button class="btn ghost" id="bk">◀ Puanım</button><h2 style="flex:1">Cevaplarım</h2></div>
